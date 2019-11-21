@@ -263,26 +263,26 @@ render(siteMainElement, createFilmCardsListElement());
 const siteFilmListElement = siteMainElement.querySelector(`.films-list`);
 const siteFilmListTopRatedElement = siteMainElement.querySelector(`.top_rated`);
 const siteFilmListMostCommentedElement = siteMainElement.querySelector(`.most_commented`);
-const siteFilmsListContainer = siteFilmListElement.querySelector(`.films-list__container`);
-const siteFilmsTopRatedListContainer = siteFilmListTopRatedElement.querySelector(`.films-list__container`);
-const siteFilmsMostCommentedListContainer = siteFilmListMostCommentedElement.querySelector(`.films-list__container`);
+const siteFilmsListContainerElement = siteFilmListElement.querySelector(`.films-list__container`);
+const siteFilmsTopRatedListContainerElement = siteFilmListTopRatedElement.querySelector(`.films-list__container`);
+const siteFilmsMostCommentedListContainerElement = siteFilmListMostCommentedElement.querySelector(`.films-list__container`);
 
 new Array(FILM_CARD_AMOUNT)
   .fill(``)
   .forEach(
-      () => render(siteFilmsListContainer, createFilmCardElement())
+      () => render( siteFilmsListContainerElement, createFilmCardElement())
   );
 
 new Array(FILM_CARD_EXTRA_AMOUNT)
   .fill(``)
   .forEach(
-      () => render(siteFilmsTopRatedListContainer, createFilmCardElement())
+      () => render(siteFilmsTopRatedListContainerElement, createFilmCardElement())
   );
 
 new Array(FILM_CARD_EXTRA_AMOUNT)
   .fill(``)
   .forEach(
-      () => render(siteFilmsMostCommentedListContainer, createFilmCardElement())
+      () => render(siteFilmsMostCommentedListContainerElement, createFilmCardElement())
   );
 
 render(siteFilmListElement, createButtonShowMoreElement());
