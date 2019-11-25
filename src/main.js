@@ -1,3 +1,4 @@
+
 import {createSearchElement} from './components/search.js';
 import {createButtonShowMoreElement} from './components/button-show-more.js';
 import {createFilmCardElement} from './components/card.js';
