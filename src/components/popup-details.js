@@ -11,7 +11,7 @@ export const createFilmDetailsPopupElement = (filmDetails) => {
   };
 
   const watchList = () => {
-    return (filmDetails.isGoingToWatchList) ? `film-card__controls-item--favorite` : ``;
+    return (filmDetails.isGoingToWatchlist) ? `film-card__controls-item--favorite` : ``;
   };
 
   return (`<section class="film-details">
@@ -68,8 +68,6 @@ export const createFilmDetailsPopupElement = (filmDetails) => {
                         <td class="film-details__term">Genres</td>
                         <td class="film-details__cell">
                           <span class="film-details__genre">${filmDetails.genre}</span>
-                          <span class="film-details__genre">${filmDetails.genre}</span>
-                          <span class="film-details__genre">${filmDetails.genre}</span></td>
                       </tr>
                     </table>
           

@@ -53,7 +53,7 @@ const actors = [
 
 const descriptions = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus`.split(`. `);
 
-const genres = new Set([
+const genres = [
   `Romance comedy`,
   `Science fiction`,
   `Horror`,
@@ -63,7 +63,7 @@ const genres = new Set([
   `Drama`,
   `Comedy`,
   `Adventure`
-]);
+];
 
 const restrictions = new Set([0, 6, 12, 16, 18]);
 
@@ -98,16 +98,16 @@ const generateFilmCard = () => {
     rating: generateRandomNumber(11, 1),
     year: generateRandomNumber(2019, 1900),
     duration: generateRandomNumber(360, 60),
-    genre: getRandomValue(Array.from(genres)),
+    genre: genres.slice(0, generateRandomNumber(9, 1)).join(`, `),
     description: getRandomArrayElements(descriptions, generateRandomNumber(3)).join(`. `),
     comments: generateRandomNumber(200),
     isFavorite: generateRandomBoolean(),
     isWatched: generateRandomBoolean(),
     isGoingToWatchlist: generateRandomBoolean(),
     poster: getRandomValue(posters),
-    actors: getRandomArrayElements(actors, 3),
-    writers: getRandomArrayElements(actors, 3),
-    director: getRandomArrayElements(actors, 1),
+    actors: getRandomArrayElements(actors, 3).join(`, `),
+    writers: getRandomArrayElements(actors, 3).join(`, `),
+    director: getRandomArrayElements(actors, 2).join(`, `),
     restrictions: getRandomValue(Array.from(restrictions)),
     premiere: randomDate(new Date(1900, 1, 1), new Date()),
     country: getRandomValue(Array.from(countries)),
