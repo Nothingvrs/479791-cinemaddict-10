@@ -68,7 +68,7 @@ export const createFilmDetailsPopupElement = (filmDetails) => {
                         <td class="film-details__term">Genres</td>
                         <td class="film-details__cell">
                           <span class="film-details__genre">${filmDetails.genre}</span>
-                          <span class="film-details__genre">$filmDetails.{genre}</span>
+                          <span class="film-details__genre">${filmDetails.genre}</span>
                           <span class="film-details__genre">${filmDetails.genre}</span></td>
                       </tr>
                     </table>
