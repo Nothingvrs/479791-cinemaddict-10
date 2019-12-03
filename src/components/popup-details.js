@@ -42,7 +42,7 @@ export const createFilmDetailsPopupElement = (filmDetails) => {
                     <table class="film-details__table">
                       <tr class="film-details__row">
                         <td class="film-details__term">Director</td>
-                        <td class="film-details__cell">$filmDetails.director}</td>
+                        <td class="film-details__cell">${filmDetails.director}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Writers</td>
