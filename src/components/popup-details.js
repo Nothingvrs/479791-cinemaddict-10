@@ -1,18 +1,17 @@
 import {formatDate, Time} from "../utils";
 
 export const createFilmDetailsPopupElement = (filmDetails) => {
-  const {title, rating, duration, genre, poster, director, description, isFavorite, isWatched, isGoingToWatchList, actors, restrictions, premiere, country} = filmDetails;
 
   const favorite = () => {
-    return (isFavorite) ? `film-card__controls-item--favorite` : ``;
+    return (filmDetails.isFavorite) ? `film-card__controls-item--favorite` : ``;
   };
 
   const watched = () => {
-    return (isWatched) ? `film-card__controls-item--favorite` : ``;
+    return (filmDetails.isWatched) ? `film-card__controls-item--favorite` : ``;
   };
 
   const watchList = () => {
-    return (isGoingToWatchList) ? `film-card__controls-item--favorite` : ``;
+    return (filmDetails.isGoingToWatchList) ? `film-card__controls-item--favorite` : ``;
   };
 
   return (`<section class="film-details">
@@ -23,59 +22,59 @@ export const createFilmDetailsPopupElement = (filmDetails) => {
                 </div>
                 <div class="film-details__info-wrap">
                   <div class="film-details__poster">
-                    <img class="film-details__poster-img" src=${poster} alt="">
+                    <img class="film-details__poster-img" src=${filmDetails.poster} alt="">
           
-                    <p class="film-details__age">${restrictions}+</p>
+                    <p class="film-details__age">${filmDetails.restrictions}+</p>
                   </div>
           
                   <div class="film-details__info">
                     <div class="film-details__info-head">
                       <div class="film-details__title-wrap">
-                        <h3 class="film-details__title">${title}</h3>
-                        <p class="film-details__title-original">Original: ${title}</p>
+                        <h3 class="film-details__title">${filmDetails.title}</h3>
+                        <p class="film-details__title-original">Original: ${filmDetails.title}</p>
                       </div>
           
                       <div class="film-details__rating">
-                        <p class="film-details__total-rating">${rating}</p>
+                        <p class="film-details__total-rating">${filmDetails.rating}</p>
                       </div>
                     </div>
           
                     <table class="film-details__table">
                       <tr class="film-details__row">
                         <td class="film-details__term">Director</td>
-                        <td class="film-details__cell">${director}</td>
+                        <td class="film-details__cell">$filmDetails.director}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Writers</td>
-                        <td class="film-details__cell">${actors}</td>
+                        <td class="film-details__cell">${filmDetails.writers}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Actors</td>
-                        <td class="film-details__cell">${actors}</td>
+                        <td class="film-details__cell">${filmDetails.actors}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Release Date</td>
-                        <td class="film-details__cell">${formatDate(premiere)}</td>
+                        <td class="film-details__cell">${formatDate(filmDetails.premiere)}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Runtime</td>
-                        <td class="film-details__cell">${Math.round(duration / Time.HOUR)}h&nbsp;${duration % Time.HOUR}m</td>
+                        <td class="film-details__cell">${Math.floor(filmDetails.duration / Time.HOUR)}h&nbsp;${filmDetails.duration % Time.HOUR}m</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Country</td>
-                        <td class="film-details__cell">${country}</td>
+                        <td class="film-details__cell">${filmDetails.country}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Genres</td>
                         <td class="film-details__cell">
-                          <span class="film-details__genre">${genre}</span>
-                          <span class="film-details__genre">${genre}</span>
-                          <span class="film-details__genre">${genre}</span></td>
+                          <span class="film-details__genre">${filmDetails.genre}</span>
+                          <span class="film-details__genre">$filmDetails.{genre}</span>
+                          <span class="film-details__genre">${filmDetails.genre}</span></td>
                       </tr>
                     </table>
           
                     <p class="film-details__film-description">
-                      ${description}
+                      ${filmDetails.description}
                     </p>
                   </div>
                 </div>

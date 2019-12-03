@@ -61,11 +61,11 @@ if (topRatingFilms.length > 0) {
 }
 
 const topCommentsFilms = filmCards
-  .sort((film1, film2) => (film2.comments.length - film1.comments.length))
-  .filter((film) => film.comments.length !== 0)
+  .sort((film1, film2) => (film2.comments - film1.comments))
+  .filter((film) => film.comments !== 0)
   .slice(0, FILM_CARD_EXTRA_AMOUNT);
 
-if (topRatingFilms.length > 0) {
+if (topCommentsFilms.length > 0) {
   render(siteFilmBoardElement, createExtraFilmsTemplate(`Most commented`, topCommentsFilms));
 }
 

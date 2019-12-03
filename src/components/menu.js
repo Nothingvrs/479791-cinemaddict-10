@@ -5,7 +5,7 @@ export const createMenuElement = (cards) => {
   let historyCount = 0;
   let favoritesCount = 0;
 
-  for (const card of cards) {
+  cards.forEach((card) => {
     if (card.isGoingToWatchlist) {
       watchlistCount++;
     }
@@ -15,7 +15,7 @@ export const createMenuElement = (cards) => {
     if (card.isFavorite) {
       favoritesCount++;
     }
-  }
+  });
 
   return (`<nav class="main-navigation">
              <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>

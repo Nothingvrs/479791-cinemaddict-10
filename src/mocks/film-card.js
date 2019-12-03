@@ -106,6 +106,7 @@ const generateFilmCard = () => {
     isGoingToWatchlist: generateRandomBoolean(),
     poster: getRandomValue(posters),
     actors: getRandomArrayElements(actors, 3),
+    writers: getRandomArrayElements(actors, 3),
     director: getRandomArrayElements(actors, 1),
     restrictions: getRandomValue(Array.from(restrictions)),
     premiere: randomDate(new Date(1900, 1, 1), new Date()),
