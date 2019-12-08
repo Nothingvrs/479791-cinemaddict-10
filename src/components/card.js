@@ -1,9 +1,11 @@
 import {createElement, Time} from "../utils";
 
 export default class FilmCard {
-  constructor(filmCard) {
+  constructor(filmCard, closeButton, list) {
     this._filmCard = filmCard;
     this._element = null;
+    this._closeButton = closeButton;
+    this._list = list;
   }
 
   getIsFavoriteClass() {
@@ -48,5 +50,26 @@ export default class FilmCard {
 
   removeElement() {
     this._element = null;
+  }
+
+
+  openPopup(popup) {
+    this._list.appendChild(popup.getElement());
+  }
+
+  closePopup(popup) {
+    this._list.removeChild(popup.getElement());
+  }
+
+  getOpen(button, popup) {
+    button.addEventListener(`click`, () => {
+      this.openPopup(popup);
+    });
+  }
+
+  getClose(popup) {
+    this._closeButton.addEventListener(`click`, () => {
+      this.closePopup(popup);
+    });
   }
 }

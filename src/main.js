@@ -3,10 +3,10 @@ import LoadMoreButton from "./components/button-show-more";
 import FilmCard from "./components/card";
 import FilmCardList from "./components/film-card-list";
 import Menu from "./components/menu";
-//import PopupDetails from "./components/popup-details";
 import Profile from "./components/profile";
 import ExtraFilms from "./components/extra";
 import Sort from "./components/sorting";
+import PopupDetails from "./components/popup-details";
 import {generateFimCards} from "./mocks/film-card";
 import {render, RenderPosition} from "./utils";
 
@@ -30,9 +30,25 @@ const siteFilmListElement = siteMainElement.querySelector(`.films-list`);
 const siteFilmsListContainerElement = siteFilmListElement.querySelector(`.films-list__container`);
 const siteFilmBoardElement = document.querySelector(`.films`);
 
-render(siteFilmsListContainerElement, new FilmCard(filmCards[0]).getElement(), RenderPosition.BEFOREEND);
+const renderFilmCard = (cardListElement, card) => {
+  const popupElement = new PopupDetails(card);
+  const closePopup = popupElement.getElement().querySelector(`.film-details__close-btn`);
+  const filmCardElement = new FilmCard(card, closePopup, siteMainElement);
+  const openCard = filmCardElement.getElement().querySelector(`img`);
+  const openTitle = filmCardElement.getElement().querySelector(`.film-card__title`);
+  const openComments = filmCardElement.getElement().querySelector(`.film-card__comments`);
+
+  filmCardElement.getOpen(openCard, popupElement);
+  filmCardElement.getOpen(openTitle, popupElement);
+  filmCardElement.getOpen(openComments, popupElement);
+  filmCardElement.getClose(popupElement);
+
+  render(cardListElement, filmCardElement.getElement(), RenderPosition.BEFOREEND);
+};
+
+renderFilmCard(siteFilmsListContainerElement, filmCards[0]);
 let showingCardsCount = FILM_CARD_AMOUNT_ON_START;
-filmCards.slice(1, showingCardsCount).forEach((card) => render(siteFilmsListContainerElement, new FilmCard(card).getElement(), `beforeend`));
+filmCards.slice(1, showingCardsCount).forEach((card) => renderFilmCard(siteFilmsListContainerElement, card));
 
 render(siteFilmListElement, new LoadMoreButton().getElement(), RenderPosition.BEFOREEND);
 
@@ -42,7 +58,7 @@ loadMoreButton.addEventListener(`click`, () => {
   showingCardsCount = showingCardsCount + FILM_CARD_AMOUNT_BY_BUTTON;
 
   filmCards.slice(prevCardsCount, showingCardsCount)
-    .forEach((card) => render(siteFilmsListContainerElement, new FilmCard(card).getElement(), RenderPosition.BEFOREEND));
+    .forEach((card) => renderFilmCard(siteFilmsListContainerElement, card));
 
   if (showingCardsCount >= filmCards.length) {
     loadMoreButton.remove();
@@ -54,17 +70,20 @@ const topRatingFilms = filmCards
   .filter((film) => film.rating !== 0)
   .slice(0, FILM_CARD_EXTRA_AMOUNT);
 if (topRatingFilms.length > 0) {
-  const createFilmsListMarkup = topRatingFilms.map((film) => (new FilmCard(film).getElement())).join(``);
-  render(siteFilmBoardElement, new ExtraFilms(`Top rated`, createFilmsListMarkup).getElement());
+  render(siteFilmBoardElement, new ExtraFilms(`Top rated`).getElement(), RenderPosition.BEFOREEND);
+  const extraFilmsContainerElement = siteFilmBoardElement.querySelector(`.films-list--extra`);
+  const extraFilmsBoardElement = extraFilmsContainerElement.querySelector(`.films-list__container`);
+  topRatingFilms.map((film) => (renderFilmCard(extraFilmsBoardElement, film)));
 }
 
 const topCommentsFilms = filmCards
   .sort((film1, film2) => (film2.comments - film1.comments))
   .filter((film) => film.comments !== 0)
   .slice(0, FILM_CARD_EXTRA_AMOUNT);
-
 if (topCommentsFilms.length > 0) {
-  const createFilmsListMarkup = topCommentsFilms.map((film) => (new FilmCard(film).getElement())).join(``);
-  render(siteFilmBoardElement, new ExtraFilms(`Most commented`, createFilmsListMarkup).getElement());
+  render(siteFilmBoardElement, new ExtraFilms(`MostCommented`).getElement(), RenderPosition.BEFOREEND);
+  const extraFilmsContainerElement = siteFilmBoardElement.querySelectorAll(`.films-list--extra`);
+  const extraFilmsBoardElement = extraFilmsContainerElement[1].querySelector(`.films-list__container`);
+  topCommentsFilms.map((film) => (renderFilmCard(extraFilmsBoardElement, film)));
 }
 
