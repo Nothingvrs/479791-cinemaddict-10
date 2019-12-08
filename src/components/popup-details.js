@@ -1,20 +1,17 @@
-import {formatDate, Time} from "../utils";
+import {createElement, formatDate, Time} from "../utils";
 
-export const createFilmDetailsPopupElement = (filmDetails) => {
+export default class PopupDetails {
+  constructor(filmDetails) {
+    this._element = null;
+    this._filmDetails = filmDetails;
+    this._watched = null;
+    this._favorite = null;
+    this._watchList = null;
+  }
 
-  const favorite = () => {
-    return (filmDetails.isFavorite) ? `film-card__controls-item--favorite` : ``;
-  };
-
-  const watched = () => {
-    return (filmDetails.isWatched) ? `film-card__controls-item--favorite` : ``;
-  };
-
-  const watchList = () => {
-    return (filmDetails.isGoingToWatchlist) ? `film-card__controls-item--favorite` : ``;
-  };
-
-  return (`<section class="film-details">
+  getTemplate() {
+    this.filmFeatures();
+    return (`<section class="film-details">
             <form class="film-details__inner" action="" method="get">
               <div class="form-details__top-container">
                 <div class="film-details__close">
@@ -22,70 +19,70 @@ export const createFilmDetailsPopupElement = (filmDetails) => {
                 </div>
                 <div class="film-details__info-wrap">
                   <div class="film-details__poster">
-                    <img class="film-details__poster-img" src=${filmDetails.poster} alt="">
+                    <img class="film-details__poster-img" src=${this._filmDetails.poster} alt="">
           
-                    <p class="film-details__age">${filmDetails.restrictions}+</p>
+                    <p class="film-details__age">${this._filmDetails.restrictions}+</p>
                   </div>
           
                   <div class="film-details__info">
                     <div class="film-details__info-head">
                       <div class="film-details__title-wrap">
-                        <h3 class="film-details__title">${filmDetails.title}</h3>
-                        <p class="film-details__title-original">Original: ${filmDetails.title}</p>
+                        <h3 class="film-details__title">${this._filmDetails.title}</h3>
+                        <p class="film-details__title-original">Original: ${this._filmDetails.title}</p>
                       </div>
           
                       <div class="film-details__rating">
-                        <p class="film-details__total-rating">${filmDetails.rating}</p>
+                        <p class="film-details__total-rating">${this._filmDetails.rating}</p>
                       </div>
                     </div>
           
                     <table class="film-details__table">
                       <tr class="film-details__row">
                         <td class="film-details__term">Director</td>
-                        <td class="film-details__cell">${filmDetails.director}</td>
+                        <td class="film-details__cell">${this._filmDetails.director}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Writers</td>
-                        <td class="film-details__cell">${filmDetails.writers}</td>
+                        <td class="film-details__cell">${this._filmDetails.writers}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Actors</td>
-                        <td class="film-details__cell">${filmDetails.actors}</td>
+                        <td class="film-details__cell">${this._filmDetails.actors}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Release Date</td>
-                        <td class="film-details__cell">${formatDate(filmDetails.premiere)}</td>
+                        <td class="film-details__cell">${formatDate(this._filmDetails.premiere)}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Runtime</td>
-                        <td class="film-details__cell">${Math.floor(filmDetails.duration / Time.HOUR)}h&nbsp;${filmDetails.duration % Time.HOUR}m</td>
+                        <td class="film-details__cell">${Math.floor(this._filmDetails.duration / Time.HOUR)}h&nbsp;${this._filmDetails.duration % Time.HOUR}m</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Country</td>
-                        <td class="film-details__cell">${filmDetails.country}</td>
+                        <td class="film-details__cell">${this._filmDetails.country}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Genres</td>
                         <td class="film-details__cell">
-                          <span class="film-details__genre">${filmDetails.genre}</span>
+                          <span class="film-details__genre">${this._filmDetails.genre}</span>
                       </tr>
                     </table>
           
                     <p class="film-details__film-description">
-                      ${filmDetails.description}
+                      ${this._filmDetails.description}
                     </p>
                   </div>
                 </div>
           
                 <section class="film-details__controls">
                   <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
-                  <label for="watchlist" class="film-details__control-label ${watchList()}">Add to watchlist</label>
+                  <label for="watchlist" class="film-details__control-label ${this._watchList()}">Add to watchlist</label>
           
                   <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
-                  <label for="watched" class="film-details__control-label ${watched()}">Already watched</label>
+                  <label for="watched" class="film-details__control-label ${this._watched()}">Already watched</label>
           
                   <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
-                  <label for="favorite" class="film-details__control-label ${favorite()}">Add to favorites</label>
+                  <label for="favorite" class="film-details__control-label ${this._favorite()}">Add to favorites</label>
                 </section>
               </div>
           
@@ -181,4 +178,31 @@ export const createFilmDetailsPopupElement = (filmDetails) => {
               </div>
             </form>
           </section>`);
-};
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+  filmFeatures() {
+    this._favorite = () => {
+      return (this._filmDetails.isFavorite) ? `film-card__controls-item--favorite` : ``;
+    };
+
+    this._watched = () => {
+      return (this._filmDetails.isWatched) ? `film-card__controls-item--favorite` : ``;
+    };
+
+    this._watchList = () => {
+      return (this._filmDetails.isGoingToWatchlist) ? `film-card__controls-item--favorite` : ``;
+    };
+  }
+}
