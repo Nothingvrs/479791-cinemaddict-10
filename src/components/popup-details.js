@@ -4,9 +4,6 @@ export default class PopupDetails {
   constructor(filmDetails) {
     this._element = null;
     this._filmDetails = filmDetails;
-    this._watched = null;
-    this._favorite = null;
-    this._watchList = null;
   }
 
   getTemplate() {
@@ -76,13 +73,13 @@ export default class PopupDetails {
           
                 <section class="film-details__controls">
                   <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
-                  <label for="watchlist" class="film-details__control-label ${this._watchList()}">Add to watchlist</label>
+                  <label for="watchlist" class="film-details__control-label film-card__controls-item--favorite}">Add to watchlist</label>
           
                   <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
-                  <label for="watched" class="film-details__control-label ${this._watched()}">Already watched</label>
+                  <label for="watched" class="film-details__control-label film-card__controls-item--favorite}">Already watched</label>
           
                   <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
-                  <label for="favorite" class="film-details__control-label ${this._favorite()}">Add to favorites</label>
+                  <label for="favorite" class="film-details__control-label film-card__controls-item--favorite}">Add to favorites</label>
                 </section>
               </div>
           
