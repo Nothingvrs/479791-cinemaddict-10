@@ -1,18 +1,17 @@
-import {createElement, generateRandomNumber} from "../utils";
+import {createElement, generateRandomNumber} from '../utils';
 
 export default class Profile {
-  constructor(userRating, filmsAmount) {
+  constructor() {
     this._element = null;
-    this._userRating = userRating;
-    this._filmsAmount = filmsAmount;
+    this._filmsAmount = generateRandomNumber(30, 1);
     this._noviceCount = 10;
     this._fanCount = 20;
   }
 
   getTemplate() {
-    const userRating = generateRandomNumber(30, 1);
+    generateRandomNumber(30, 1);
     return (`<section class="header__profile profile">
-                <p class="profile__rating">${this.generateRating(userRating)}</p>
+                <p class="profile__rating">${this.generateRating()}</p>
                 <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
            </section>`);
   }
@@ -32,9 +31,9 @@ export default class Profile {
   generateRating() {
     let rating;
     if (this._filmsAmount < this._noviceCount) {
-      rating = (`novice`);
+      rating = `novice`;
     } else if (this._filmsAmount > this._noviceCount && this._filmsAmount < this._fanCount) {
-      rating = (`fan`);
+      rating = `fan`;
     } else if (this._filmsAmount > this._fanCount) {
       rating = (`movie buff`);
     } return rating;

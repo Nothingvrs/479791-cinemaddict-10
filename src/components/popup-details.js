@@ -1,4 +1,4 @@
-import {createElement, formatDate, Time} from "../utils";
+import {createElement, formatDate, Time} from '../utils';
 
 export default class PopupDetails {
   constructor(filmDetails) {

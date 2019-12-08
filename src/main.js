@@ -1,14 +1,14 @@
-import Search from "./components/search";
-import LoadMoreButton from "./components/button-show-more";
-import FilmCard from "./components/card";
-import FilmCardList from "./components/film-card-list";
-import Menu from "./components/menu";
-import Profile from "./components/profile";
-import ExtraFilms from "./components/extra";
-import Sort from "./components/sorting";
-import PopupDetails from "./components/popup-details";
-import {generateFimCards} from "./mocks/film-card";
-import {render, RenderPosition} from "./utils";
+import Search from './components/search';
+import LoadMoreButton from './components/button-show-more';
+import FilmCard from './components/card';
+import FilmCardList from './components/film-card-list';
+import Menu from './components/menu';
+import Profile from './components/profile';
+import ExtraFilms from './components/extra';
+import Sort from './components/sorting';
+import PopupDetails from './components/popup-details';
+import {generateFimCards} from './mocks/film-card';
+import {render, RenderPosition} from './utils';
 
 const FILM_CARD_AMOUNT_BY_BUTTON = 5;
 const FILM_CARD_AMOUNT_ON_START = 5;

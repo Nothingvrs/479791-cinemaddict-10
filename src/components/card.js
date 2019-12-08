@@ -1,4 +1,4 @@
-import {createElement, Time} from "../utils";
+import {createElement, Time} from '../utils';
 
 export default class FilmCard {
   constructor(filmCard, closeButton, list) {
