@@ -35,7 +35,7 @@ export default class Profile {
     } else if (this._filmsAmount > this._noviceCount && this._filmsAmount < this._fanCount) {
       rating = `fan`;
     } else if (this._filmsAmount > this._fanCount) {
-      rating = (`movie buff`);
+      rating = `movie buff`;
     } return rating;
   }
 }
