@@ -30,9 +30,9 @@ export default class Profile {
 
   generateRating() {
     let rating;
-    if (this._filmsAmount < this._noviceCount) {
+    if (this._filmsAmount <= this._noviceCount) {
       rating = `novice`;
-    } else if (this._filmsAmount > this._noviceCount && this._filmsAmount < this._fanCount) {
+    } else if (this._filmsAmount > this._noviceCount && this._filmsAmount <= this._fanCount) {
       rating = `fan`;
     } else if (this._filmsAmount > this._fanCount) {
       rating = `movie buff`;
