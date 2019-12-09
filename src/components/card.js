@@ -61,15 +61,17 @@ export default class FilmCard {
     this._list.removeChild(popup.getElement());
   }
 
-  getOpen(button, popup) {
+  getOpen(button, popup, handler) {
     button.addEventListener(`click`, () => {
       this.openPopup(popup);
+      document.addEventListener(`keydown`, handler);
     });
   }
 
-  getClose(popup) {
+  getClose(popup, handler) {
     this._closeButton.addEventListener(`click`, () => {
       this.closePopup(popup);
+      document.removeEventListener(`keydown`, handler);
     });
   }
 }
