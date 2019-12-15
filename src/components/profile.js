@@ -1,8 +1,9 @@
-import {createElement, generateRandomNumber} from '../utils';
+import {generateRandomNumber} from '../utils/common.js';
+import AbstractComponent from './abstract-component';
 
-export default class Profile {
+export default class Profile extends AbstractComponent {
   constructor() {
-    this._element = null;
+    super();
     this._filmsAmount = generateRandomNumber(30, 1);
     this._noviceCount = 10;
     this._fanCount = 20;
@@ -14,18 +15,6 @@ export default class Profile {
                 <p class="profile__rating">${this.generateRating()}</p>
                 <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
            </section>`);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   generateRating() {

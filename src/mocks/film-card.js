@@ -3,7 +3,7 @@ import {
   generateRandomNumber,
   getRandomArrayElements,
   generateRandomBoolean,
-} from '../utils.js';
+} from '../utils/common.js';
 
 const titles = [
   `The Lion King`,
