@@ -3,7 +3,7 @@ import {
   generateRandomNumber,
   getRandomArrayElements,
   generateRandomBoolean,
-} from '../utils.js';
+} from '../utils/common.js';
 
 const titles = [
   `The Lion King`,
@@ -93,10 +93,11 @@ const randomDate = (start, end) => {
 };
 
 const generateFilmCard = () => {
+  const datePremiere = randomDate(new Date(1900, 1, 1), new Date());
   return {
     title: getRandomValue(titles),
     rating: generateRandomNumber(11, 1),
-    year: generateRandomNumber(2019, 1900),
+    year: datePremiere.getFullYear(),
     duration: generateRandomNumber(360, 60),
     genre: genres.slice(0, generateRandomNumber(9, 1)).join(`, `),
     description: getRandomArrayElements(descriptions, generateRandomNumber(3)).join(`. `),
@@ -109,7 +110,7 @@ const generateFilmCard = () => {
     writers: getRandomArrayElements(actors, 3).join(`, `),
     director: getRandomArrayElements(actors, 2).join(`, `),
     restrictions: getRandomValue(Array.from(restrictions)),
-    premiere: randomDate(new Date(1900, 1, 1), new Date()),
+    premiere: datePremiere,
     country: getRandomValue(Array.from(countries)),
   };
 };

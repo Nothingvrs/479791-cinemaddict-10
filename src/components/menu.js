@@ -1,8 +1,8 @@
-import {createElement} from '../utils';
+import AbstractComponent from './abstract-component';
 
-export default class Menu {
+export default class Menu extends AbstractComponent {
   constructor(cards) {
-    this._element = null;
+    super();
     this._watchlistCount = 0;
     this._historyCount = 0;
     this._favoritesCount = 0;
@@ -18,18 +18,6 @@ export default class Menu {
              <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">${this._favoritesCount}</span></a>
              <a href="#stats" class="main-navigation__item main-navigation__item--additional">Stats</a>
            </nav>`);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   filmFeatures() {

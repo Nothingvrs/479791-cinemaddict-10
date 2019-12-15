@@ -1,11 +1,10 @@
-import {createElement, Time} from '../utils';
+import AbstractComponent from './abstract-component';
+import {Time} from '../utils/common';
 
-export default class FilmCard {
-  constructor(filmCard, closeButton, list) {
+export default class FilmCard extends AbstractComponent {
+  constructor(filmCard) {
+    super();
     this._filmCard = filmCard;
-    this._element = null;
-    this._closeButton = closeButton;
-    this._list = list;
   }
 
   getIsFavoriteClass() {
@@ -40,38 +39,7 @@ export default class FilmCard {
           </article>`);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-
-
-  openPopup(popup) {
-    this._list.appendChild(popup.getElement());
-  }
-
-  closePopup(popup) {
-    this._list.removeChild(popup.getElement());
-  }
-
-  getOpen(button, popup, handler) {
-    button.addEventListener(`click`, () => {
-      this.openPopup(popup);
-      document.addEventListener(`keydown`, handler);
-    });
-  }
-
-  getClose(popup, handler) {
-    this._closeButton.addEventListener(`click`, () => {
-      this.closePopup(popup);
-      document.removeEventListener(`keydown`, handler);
-    });
+  getOpenCard(handler) {
+    this._element.querySelectorAll(`img, .film-card__title, .film-card__comments`).forEach((element) => element.addEventListener(`click`, handler));
   }
 }

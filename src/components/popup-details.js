@@ -1,8 +1,9 @@
-import {createElement, formatDate, Time} from '../utils';
+import {formatDate, Time} from '../utils/common.js';
+import AbstractComponent from './abstract-component';
 
-export default class PopupDetails {
+export default class PopupDetails extends AbstractComponent {
   constructor(filmDetails) {
-    this._element = null;
+    super();
     this._filmDetails = filmDetails;
   }
 
@@ -177,16 +178,8 @@ export default class PopupDetails {
           </section>`);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  getClose(handler) {
+    this._element.querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
   }
 
   filmFeatures() {
