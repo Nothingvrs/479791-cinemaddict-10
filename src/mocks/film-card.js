@@ -92,9 +92,8 @@ const randomDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
-const datePremiere = randomDate(new Date(1900, 1, 1), new Date());
-
 const generateFilmCard = () => {
+  const datePremiere = randomDate(new Date(1900, 1, 1), new Date());
   return {
     title: getRandomValue(titles),
     rating: generateRandomNumber(11, 1),
