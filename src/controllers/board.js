@@ -24,25 +24,32 @@ const renderFilmCard = (cardListElement, card) => {
     }
   };
 
+  render(cardListElement, filmCardElement, RenderPosition.BEFOREEND);
+
   filmCardElement.getOpenPoster(() => {
     openClosePopup(popupElement, siteMainElement);
     document.addEventListener(`keydown`, onEscKeyDown);
+    popupElement.getClose(() => {
+      openClosePopup(popupElement, siteMainElement);
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    });
   });
   filmCardElement.getOpenTitle(() => {
     openClosePopup(popupElement, siteMainElement);
     document.addEventListener(`keydown`, onEscKeyDown);
+    popupElement.getClose(() => {
+      openClosePopup(popupElement, siteMainElement);
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    });
   });
   filmCardElement.getOpenComments(() => {
     openClosePopup(popupElement, siteMainElement);
     document.addEventListener(`keydown`, onEscKeyDown);
+    popupElement.getClose(() => {
+      openClosePopup(popupElement, siteMainElement);
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    });
   });
-
-  popupElement.getClose(() => {
-    openClosePopup(popupElement, siteMainElement);
-    document.removeEventListener(`keydown`, onEscKeyDown);
-  });
-
-  render(cardListElement, filmCardElement, RenderPosition.BEFOREEND);
 };
 
 export default class BoardController {
