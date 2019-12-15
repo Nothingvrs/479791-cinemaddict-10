@@ -40,14 +40,14 @@ export default class FilmCard extends AbstractComponent {
   }
 
   getOpenPoster(handler) {
-    this.getElement().querySelector(`img`).addEventListener(`click`, handler);
+    this._element.querySelector(`img`).addEventListener(`click`, handler);
   }
 
   getOpenTitle(handler) {
-    this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, handler);
+    this._element.querySelector(`.film-card__title`).addEventListener(`click`, handler);
   }
 
   getOpenComments(handler) {
-    this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, handler);
+    this._element.querySelector(`.film-card__comments`).addEventListener(`click`, handler);
   }
 }
