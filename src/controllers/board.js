@@ -1,6 +1,6 @@
 import PopupDetails from '../components/popup-details';
 import FilmCard from '../components/card';
-import {openClosePopup, render, RenderPosition} from '../utils/render';
+import {togglePopup, render, RenderPosition} from '../utils/render';
 import LoadMoreButton from '../components/button-show-more';
 import NoMovies from '../components/no-movies';
 import ExtraFilms from "../components/extra";
@@ -15,38 +15,22 @@ const renderFilmCard = (cardListElement, card) => {
   const popupElement = new PopupDetails(card);
   const filmCardElement = new FilmCard(card);
 
+  render(cardListElement, filmCardElement, RenderPosition.BEFOREEND);
+
   const onEscKeyDown = (evt) => {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
-      openClosePopup(popupElement, siteMainElement);
+      togglePopup(popupElement, siteMainElement);
       document.removeEventListener(`keydown`, onEscKeyDown);
     }
   };
 
-  render(cardListElement, filmCardElement, RenderPosition.BEFOREEND);
-
-  filmCardElement.getOpenPoster(() => {
-    openClosePopup(popupElement, siteMainElement);
+  filmCardElement.getOpenCard(() => {
+    togglePopup(popupElement, siteMainElement);
     document.addEventListener(`keydown`, onEscKeyDown);
     popupElement.getClose(() => {
-      openClosePopup(popupElement, siteMainElement);
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-  });
-  filmCardElement.getOpenTitle(() => {
-    openClosePopup(popupElement, siteMainElement);
-    document.addEventListener(`keydown`, onEscKeyDown);
-    popupElement.getClose(() => {
-      openClosePopup(popupElement, siteMainElement);
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-  });
-  filmCardElement.getOpenComments(() => {
-    openClosePopup(popupElement, siteMainElement);
-    document.addEventListener(`keydown`, onEscKeyDown);
-    popupElement.getClose(() => {
-      openClosePopup(popupElement, siteMainElement);
+      togglePopup(popupElement, siteMainElement);
       document.removeEventListener(`keydown`, onEscKeyDown);
     });
   });

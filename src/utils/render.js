@@ -26,7 +26,7 @@ export const remove = (component) => {
   component.removeElement();
 };
 
-export const openClosePopup = (popup, list) => {
+export const togglePopup = (popup, list) => {
   if (list.contains(popup.getElement())) {
     list.removeChild(popup.getElement());
   } else {
