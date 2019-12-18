@@ -1,9 +1,11 @@
 import PopupDetails from '../components/popup-details';
 import FilmCard from '../components/card';
-import {togglePopup, render, RenderPosition} from '../utils/render';
+import {togglePopup, render, RenderPosition, remove} from '../utils/render';
 import LoadMoreButton from '../components/button-show-more';
 import NoMovies from '../components/no-movies';
 import ExtraFilms from "../components/extra";
+import Sort, {SortType} from '../components/sorting';
+import FilmCardList from '../components/film-card-list';
 
 const FILM_CARD_EXTRA_AMOUNT = 2;
 const FILM_CARD_AMOUNT_BY_BUTTON = 5;
@@ -36,36 +38,87 @@ const renderFilmCard = (cardListElement, card) => {
   });
 };
 
+const renderCards = (cardListElement, cards) => {
+  cards.forEach((task) => {
+    renderFilmCard(cardListElement, task);
+  });
+};
+
 export default class BoardController {
-  constructor(container, board, showMoreBoard) {
-    this._container = container;
-    this._showMoreBoard = showMoreBoard;
-    this._board = board;
+  constructor() {
+    this._container = null;
+    this._showMoreBoard = null;
+    this._board = null;
     this._loadMoreButton = new LoadMoreButton();
+    this._showingCardsCount = null;
+    this.sortComponent = new Sort();
+    this._sortedTasks = [];
   }
 
   renderFilmCards(filmCards) {
     if (filmCards.length) {
+      render(siteMainElement, this.sortComponent, RenderPosition.BEFOREEND);
+      render(siteMainElement, new FilmCardList(), RenderPosition.BEFOREEND);
+      const siteFilmBoardElement = siteMainElement.querySelector(`.films`);
+      const siteFilmListElement = siteFilmBoardElement.querySelector(`.films-list`);
+      const siteFilmContainer = siteFilmListElement.querySelector(`.films-list__container`);
+      this._container = siteFilmContainer;
+      this._showMoreBoard = siteFilmListElement;
+      this._board = siteFilmBoardElement;
       renderFilmCard(this._container, filmCards[0]);
-      let showingCardsCount = FILM_CARD_AMOUNT_ON_START;
-      filmCards.slice(1, showingCardsCount).forEach((card) => renderFilmCard(this._container, card));
-
-      render(this._showMoreBoard, this._loadMoreButton, RenderPosition.BEFOREEND);
-
-      const loadMoreButton = this._showMoreBoard.querySelector(`.films-list__show-more`);
-      loadMoreButton.addEventListener(`click`, () => {
-        const prevCardsCount = showingCardsCount;
-        showingCardsCount = showingCardsCount + FILM_CARD_AMOUNT_BY_BUTTON;
-
-        filmCards.slice(prevCardsCount, showingCardsCount)
-          .forEach((card) => renderFilmCard(this._container, card));
-
-        if (showingCardsCount >= filmCards.length) {
-          loadMoreButton.remove();
-        }
+      this._showingCardsCount = FILM_CARD_AMOUNT_ON_START;
+      filmCards.slice(1, this._showingCardsCount).forEach((card) => renderFilmCard(this._container, card));
+      this.renderLoadMoreButton(filmCards);
+      this.sortComponent.setSortTypeChangeHandler((sortType) => {
+        this.sortCards(filmCards, sortType);
       });
     } else {
       render(this._container, new NoMovies(), RenderPosition.BEFOREEND);
+    }
+  }
+
+  renderLoadMoreButton(filmCards) {
+    if (this._showingCardsCount >= filmCards.length) {
+      return;
+    }
+
+    render(this._showMoreBoard, this._loadMoreButton, RenderPosition.BEFOREEND);
+
+    const loadMoreButton = this._showMoreBoard.querySelector(`.films-list__show-more`);
+    loadMoreButton.addEventListener(`click`, () => {
+      const prevCardsCount = this._showingCardsCount;
+      this._showingCardsCount = this._showingCardsCount + FILM_CARD_AMOUNT_BY_BUTTON;
+
+      filmCards.slice(prevCardsCount, this._showingCardsCount)
+        .forEach((card) => renderFilmCard(this._container, card));
+
+      if (this._showingCardsCount >= filmCards.length) {
+        loadMoreButton.remove();
+      }
+    });
+  }
+
+  sortCards(cards, sortType) {
+    switch (sortType) {
+      case SortType.SORT_BY_DATE:
+        this._sortedTasks = cards.slice().sort((a, b) => b.premiere - a.premiere);
+        break;
+      case SortType.SORT_BY_RATING:
+        this._sortedTasks = cards.slice().sort((a, b) => b.rating - a.rating);
+        break;
+      case SortType.DEFAULT:
+        this._sortedTasks = cards.slice(0, this._showingCardsCount);
+        break;
+    }
+
+    this._container.innerHTML = ``;
+
+    renderCards(this._container, this._sortedTasks);
+
+    if (sortType === SortType.DEFAULT) {
+      this.renderLoadMoreButton(cards, this._showingCardsCount, this._showMoreBoard);
+    } else {
+      remove(this._loadMoreButton);
     }
   }
 
