@@ -22,7 +22,9 @@ export default class Sort extends AbstractComponent {
   }
 
   setSortTypeChangeHandler(handler) {
-    this._sortButtonActive = this._element.querySelector(`.sort__button--active`);
+    if (this._sortButtonActive === null) {
+      this._sortButtonActive = this._element.querySelector(`.sort__button--active`);
+    }
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
