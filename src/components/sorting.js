@@ -28,6 +28,13 @@ export default class Sort extends AbstractComponent {
         return;
       }
 
+      this._element.querySelectorAll(`.sort__button`).forEach((link) => {
+        if (link.classList.contains(`sort__button--active`)) {
+          link.classList.remove(`sort__button--active`);
+        }
+      });
+      evt.target.classList.add(`sort__button--active`);
+
       const sortType = evt.target.dataset.sortType;
 
       if (this._currenSortType === sortType) {

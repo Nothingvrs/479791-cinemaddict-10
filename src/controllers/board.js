@@ -61,13 +61,11 @@ export default class BoardController {
       render(siteMainElement, new FilmCardList(), RenderPosition.BEFOREEND);
       const siteFilmBoardElement = siteMainElement.querySelector(`.films`);
       const siteFilmListElement = siteFilmBoardElement.querySelector(`.films-list`);
-      const siteFilmContainer = siteFilmListElement.querySelector(`.films-list__container`);
-      this._container = siteFilmContainer;
+      this._container = siteFilmListElement.querySelector(`.films-list__container`);
       this._showMoreBoard = siteFilmListElement;
       this._board = siteFilmBoardElement;
-      renderFilmCard(this._container, filmCards[0]);
       this._showingCardsCount = FILM_CARD_AMOUNT_ON_START;
-      filmCards.slice(1, this._showingCardsCount).forEach((card) => renderFilmCard(this._container, card));
+      filmCards.slice(0, this._showingCardsCount).forEach((card) => renderFilmCard(this._container, card));
       this.renderLoadMoreButton(filmCards);
       this.sortComponent.setSortTypeChangeHandler((sortType) => {
         this.sortCards(filmCards, sortType);
