@@ -68,7 +68,6 @@ export default class MovieController {
   }
 
   _closePopup() {
-    this._popupElement.saveData();
     togglePopup(this._popupElement, siteBodyElement);
   }
 

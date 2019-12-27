@@ -254,18 +254,21 @@ export default class PopupDetails extends AbstractSmartComponent {
     element.querySelector(`#favorite`)
       .addEventListener(`change`, () => {
         this._isFavorite = !this._isFavorite;
+        this.saveData();
         this.rerender();
       });
 
     element.querySelector(`#watchlist`)
       .addEventListener(`change`, () => {
         this._isGoingToWatchlist = !this._isGoingToWatchlist;
+        this.saveData();
         this.rerender();
       });
 
     element.querySelector(`#watched`)
       .addEventListener(`change`, () => {
         this._isWatched = !this._isWatched;
+        this.saveData();
         this.rerender();
       });
   }

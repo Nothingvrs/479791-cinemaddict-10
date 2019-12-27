@@ -11,7 +11,6 @@ export default class AbstractSmartComponent extends AbstractComponent {
     this.removeElement();
 
     const newElement = this.getElement();
-
     oldElement.replaceWith(newElement);
 
     this.recoveryListeners();
