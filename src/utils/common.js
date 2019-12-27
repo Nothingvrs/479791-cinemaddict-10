@@ -1,6 +1,6 @@
 export const generateRandomNumber = (max, min = 0) => Math.floor(Math.random() * (max - min)) + min;
 
-export const generateRandomBoolean = () => () => Math.random() > 0.5;
+export const generateRandomBoolean = () => Math.random() > 0.5;
 
 export const getRandomValue = (values) => values[generateRandomNumber(values.length)];
 

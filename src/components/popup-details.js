@@ -4,11 +4,16 @@ import AbstractComponent from './abstract-component';
 export default class PopupDetails extends AbstractComponent {
   constructor(filmDetails) {
     super();
+    this._filmCard = filmDetails;
     this._filmDetails = filmDetails;
   }
 
   getTemplate() {
-    this.filmFeatures();
+
+    const isFilmWatched = this._filmCard.isWatched ? `checked` : ``;
+    const isFilmGoingToWatchlist = this._filmCard.isGoingToWatchlist ? `checked` : ``;
+    const isFilmFavorite = this._filmCard.isFavorite ? `checked` : ``;
+
     return (`<section class="film-details">
             <form class="film-details__inner" action="" method="get">
               <div class="form-details__top-container">
@@ -73,13 +78,13 @@ export default class PopupDetails extends AbstractComponent {
                 </div>
           
                 <section class="film-details__controls">
-                  <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
-                  <label for="watchlist" class="film-details__control-label film-card__controls-item--watchlist">Add to watchlist</label>
+                  <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isFilmGoingToWatchlist}>
+                  <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
           
-                  <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
-                  <label for="watched" class="film-details__control-label film-card__controls-item--watched">Already watched</label>
+                  <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isFilmWatched}>
+                  <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
           
-                  <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+                  <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFilmFavorite}>
                   <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
                 </section>
               </div>
@@ -182,17 +187,16 @@ export default class PopupDetails extends AbstractComponent {
     this._element.querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
   }
 
-  filmFeatures() {
-    this._favorite = () => {
-      return (this._filmDetails.isFavorite) ? `film-card__controls-item--favorite` : ``;
-    };
+  setWatchlistButtonClickHandler(handler) {
+    this.getElement().querySelector(`#watchlist`)
+      .addEventListener(`click`, handler);
+  }
 
-    this._watched = () => {
-      return (this._filmDetails.isWatched) ? `film-card__controls-item--favorite` : ``;
-    };
+  setFavoriteButtonClickHandler(handler) {
+    this.getElement().querySelector(`#favorite`).addEventListener(`click`, handler);
+  }
 
-    this._watchList = () => {
-      return (this._filmDetails.isGoingToWatchlist) ? `film-card__controls-item--favorite` : ``;
-    };
+  setWatchedButtonClickHandler(handler) {
+    this.getElement().querySelector(`#watched`).addEventListener(`click`, handler);
   }
 }
