@@ -17,6 +17,7 @@ export default class PopupDetails extends AbstractSmartComponent {
     const isFilmWatched = this._filmCard.isWatched ? `checked` : ``;
     const isFilmGoingToWatchlist = this._filmCard.isGoingToWatchlist ? `checked` : ``;
     const isFilmFavorite = this._filmCard.isFavorite ? `checked` : ``;
+    const HowManyGenres = (this._filmCard.genre.length > 1) ? `Genres` : `Genre`;
 
     return (`<section class="film-details">
             <form class="film-details__inner" action="" method="get">
@@ -69,7 +70,7 @@ export default class PopupDetails extends AbstractSmartComponent {
                         <td class="film-details__cell">${this._filmCard.country}</td>
                       </tr>
                       <tr class="film-details__row">
-                        <td class="film-details__term">Genres</td>
+                        <td class="film-details__term">${HowManyGenres}</td>
                         <td class="film-details__cell">
                           <span class="film-details__genre">${this._filmCard.genre}</span>
                       </tr>
