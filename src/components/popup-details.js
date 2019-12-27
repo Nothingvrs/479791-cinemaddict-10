@@ -1,11 +1,15 @@
 import {formatDate, Time} from '../utils/common.js';
-import AbstractComponent from './abstract-component';
+import AbstractSmartComponent from './abstract-smart-component';
 
-export default class PopupDetails extends AbstractComponent {
+export default class PopupDetails extends AbstractSmartComponent {
   constructor(filmDetails) {
     super();
     this._filmCard = filmDetails;
-    this._filmDetails = filmDetails;
+    this._isFavorite = this._filmCard.isFavorite;
+    this._isWatched = this._filmCard.isWatched;
+    this._isGoingToWatchlist = this._filmCard.isGoingToWatchlist;
+    this._closeHandler = null;
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
@@ -22,57 +26,57 @@ export default class PopupDetails extends AbstractComponent {
                 </div>
                 <div class="film-details__info-wrap">
                   <div class="film-details__poster">
-                    <img class="film-details__poster-img" src=${this._filmDetails.poster} alt="">
+                    <img class="film-details__poster-img" src=${this._filmCard.poster} alt="">
           
-                    <p class="film-details__age">${this._filmDetails.restrictions}+</p>
+                    <p class="film-details__age">${this._filmCard.restrictions}+</p>
                   </div>
           
                   <div class="film-details__info">
                     <div class="film-details__info-head">
                       <div class="film-details__title-wrap">
-                        <h3 class="film-details__title">${this._filmDetails.title}</h3>
-                        <p class="film-details__title-original">Original: ${this._filmDetails.title}</p>
+                        <h3 class="film-details__title">${this._filmCard.title}</h3>
+                        <p class="film-details__title-original">Original: ${this._filmCard.title}</p>
                       </div>
           
                       <div class="film-details__rating">
-                        <p class="film-details__total-rating">${this._filmDetails.rating}</p>
+                        <p class="film-details__total-rating">${this._filmCard.rating}</p>
                       </div>
                     </div>
           
                     <table class="film-details__table">
                       <tr class="film-details__row">
                         <td class="film-details__term">Director</td>
-                        <td class="film-details__cell">${this._filmDetails.director}</td>
+                        <td class="film-details__cell">${this._filmCard.director}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Writers</td>
-                        <td class="film-details__cell">${this._filmDetails.writers}</td>
+                        <td class="film-details__cell">${this._filmCard.writers}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Actors</td>
-                        <td class="film-details__cell">${this._filmDetails.actors}</td>
+                        <td class="film-details__cell">${this._filmCard.actors}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Release Date</td>
-                        <td class="film-details__cell">${formatDate(this._filmDetails.premiere)}</td>
+                        <td class="film-details__cell">${formatDate(this._filmCard.premiere)}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Runtime</td>
-                        <td class="film-details__cell">${Math.floor(this._filmDetails.duration / Time.HOUR)}h&nbsp;${this._filmDetails.duration % Time.HOUR}m</td>
+                        <td class="film-details__cell">${Math.floor(this._filmCard.duration / Time.HOUR)}h&nbsp;${this._filmCard.duration % Time.HOUR}m</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Country</td>
-                        <td class="film-details__cell">${this._filmDetails.country}</td>
+                        <td class="film-details__cell">${this._filmCard.country}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Genres</td>
                         <td class="film-details__cell">
-                          <span class="film-details__genre">${this._filmDetails.genre}</span>
+                          <span class="film-details__genre">${this._filmCard.genre}</span>
                       </tr>
                     </table>
           
                     <p class="film-details__film-description">
-                      ${this._filmDetails.description}
+                      ${this._filmCard.description}
                     </p>
                   </div>
                 </div>
@@ -88,6 +92,58 @@ export default class PopupDetails extends AbstractComponent {
                   <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
                 </section>
               </div>
+          
+            ${this._filmCard.isWatched ?
+        ` <div class="form-details__middle-container">
+      <section class="film-details__user-rating-wrap">
+        <div class="film-details__user-rating-controls">
+          <button class="film-details__watched-reset" type="button">Undo</button>
+        </div>
+
+        <div class="film-details__user-score">
+          <div class="film-details__user-rating-poster">
+            <img src="${this._filmCard.poster}" alt="film-poster" class="film-details__user-rating-img">
+          </div>
+
+          <section class="film-details__user-rating-inner">
+            <h3 class="film-details__user-rating-title">The Great Flamarion</h3>
+
+            <p class="film-details__user-rating-feelings">How you feel it?</p>
+
+            <div class="film-details__user-rating-score">
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="1" id="rating-1">
+              <label class="film-details__user-rating-label" for="rating-1">1</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="2" id="rating-2">
+              <label class="film-details__user-rating-label" for="rating-2">2</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="3" id="rating-3">
+              <label class="film-details__user-rating-label" for="rating-3">3</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="4" id="rating-4">
+              <label class="film-details__user-rating-label" for="rating-4">4</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="5" id="rating-5">
+              <label class="film-details__user-rating-label" for="rating-5">5</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="6" id="rating-6">
+              <label class="film-details__user-rating-label" for="rating-6">6</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="7" id="rating-7">
+              <label class="film-details__user-rating-label" for="rating-7">7</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="8" id="rating-8">
+              <label class="film-details__user-rating-label" for="rating-8">8</label>
+
+              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="9" id="rating-9">
+              <label class="film-details__user-rating-label" for="rating-9">9</label>
+
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>`
+        : ``}
           
               <div class="form-details__bottom-container">
                 <section class="film-details__comments-wrap">
@@ -185,18 +241,47 @@ export default class PopupDetails extends AbstractComponent {
 
   getClose(handler) {
     this._element.querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
+    this._closeHandler = handler;
   }
 
-  setWatchlistButtonClickHandler(handler) {
-    this.getElement().querySelector(`#watchlist`)
-      .addEventListener(`click`, handler);
+  getCloseListenerRemove() {
+    this._element.querySelector(`.film-details__close-btn`).removeEventListener(`click`, this._closeHandler);
   }
 
-  setFavoriteButtonClickHandler(handler) {
-    this.getElement().querySelector(`#favorite`).addEventListener(`click`, handler);
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    element.querySelector(`#favorite`)
+      .addEventListener(`change`, () => {
+        this._isFavorite = !this._isFavorite;
+        this.rerender();
+      });
+
+    element.querySelector(`#watchlist`)
+      .addEventListener(`change`, () => {
+        this._isGoingToWatchlist = !this._isGoingToWatchlist;
+        this.rerender();
+      });
+
+    element.querySelector(`#watched`)
+      .addEventListener(`change`, () => {
+        this._isWatched = !this._isWatched;
+        this.rerender();
+      });
   }
 
-  setWatchedButtonClickHandler(handler) {
-    this.getElement().querySelector(`#watched`).addEventListener(`click`, handler);
+  recoveryListeners() {
+    this._subscribeOnEvents();
+    this.getClose(this._closeHandler);
+  }
+
+  rerender() {
+    super.rerender();
+  }
+
+  saveData() {
+    this._filmCard.isFavorite = this._isFavorite;
+    this._filmCard.isGoingToWatchlist = this._isGoingToWatchlist;
+    this._filmCard.isWatched = this._isWatched;
   }
 }

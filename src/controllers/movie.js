@@ -2,7 +2,7 @@ import PopupDetails from "../components/popup-details";
 import FilmCard from "../components/card";
 import {render, RenderPosition, togglePopup, replace} from "../utils/render";
 
-const siteMainElement = document.querySelector(`.main`);
+const siteBodyElement = document.querySelector(`body`);
 
 export default class MovieController {
   constructor(container, onDataChange) {
@@ -10,6 +10,16 @@ export default class MovieController {
     this._onDataChange = onDataChange;
     this._filmCardElement = null;
     this._popupElement = null;
+    this._onEscKeyDown = this._onEscKeyDown.bind(this);
+  }
+
+  _onEscKeyDown(evt) {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+    if (isEscKey) {
+      togglePopup(this._popupElement, siteBodyElement);
+      document.removeEventListener(`keydown`, this._onEscKeyDown);
+    }
   }
 
   render(card) {
@@ -19,21 +29,13 @@ export default class MovieController {
     this._popupElement = new PopupDetails(card);
     this._filmCardElement = new FilmCard(card);
 
-    const onEscKeyDown = (evt) => {
-      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-      if (isEscKey) {
-        togglePopup(this._popupElement, siteMainElement);
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
     this._filmCardElement.getOpenCard(() => {
-      togglePopup(this._popupElement, siteMainElement);
-      document.addEventListener(`keydown`, onEscKeyDown);
+      this._openPopup();
+      document.addEventListener(`keydown`, this._onEscKeyDown);
       this._popupElement.getClose(() => {
-        togglePopup(this._popupElement, siteMainElement);
-        document.removeEventListener(`keydown`, onEscKeyDown);
+        this._closePopup(card);
+        document.removeEventListener(`keydown`, this._onEscKeyDown);
+        this._popupElement.getCloseListenerRemove();
       });
     });
 
@@ -60,5 +62,15 @@ export default class MovieController {
       render(this._container, this._filmCardElement, RenderPosition.BEFOREEND);
     }
   }
+
+  _openPopup() {
+    togglePopup(this._popupElement, siteBodyElement);
+  }
+
+  _closePopup() {
+    this._popupElement.saveData();
+    togglePopup(this._popupElement, siteBodyElement);
+  }
+
 }
 
