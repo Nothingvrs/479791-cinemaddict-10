@@ -4,7 +4,7 @@ export default class Favorite extends AbstractSmartComponent {
   constructor(card) {
     super();
     this._filmCard = card;
-    this._isFavorite = null;
+    this._isFavorite = this._filmCard.isFavorite;
     this._subscribeOnEvent();
   }
 

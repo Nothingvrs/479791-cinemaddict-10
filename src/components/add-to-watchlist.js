@@ -4,7 +4,7 @@ export default class AddToWatchlist extends AbstractSmartComponent {
   constructor(card) {
     super();
     this._filmCard = card;
-    this._isGoingToWatchlist = null;
+    this._isGoingToWatchlist = this._filmCard.isGoingToWatchlist;
     this._subscribeOnEvent();
   }
 

@@ -7,7 +7,7 @@ export default class Watched extends AbstractSmartComponent {
     super();
     this._container = container;
     this._filmCard = card;
-    this._isWatched = null;
+    this._isWatched = this._filmCard.isWatched;
     this._subscribeOnEvent();
   }
 
