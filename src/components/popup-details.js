@@ -7,15 +7,14 @@ export default class PopupDetails extends AbstractSmartComponent {
     this._filmCard = filmDetails;
     this._isFavorite = this._filmCard.isFavorite;
     this._isWatched = this._filmCard.isWatched;
-    this._isGoingToWatchlist = this._filmCard.isGoingToWatchlist;
     this._closeHandler = null;
-    this._subscribeOnEvents();
+    this._emojiAdd = null;
+    this._checkedEmoji = [];
   }
 
   getTemplate() {
 
     const isFilmWatched = this._filmCard.isWatched ? `checked` : ``;
-    const isFilmGoingToWatchlist = this._filmCard.isGoingToWatchlist ? `checked` : ``;
     const isFilmFavorite = this._filmCard.isFavorite ? `checked` : ``;
     const HowManyGenres = (this._filmCard.genre.length > 1) ? `Genres` : `Genre`;
 
@@ -83,9 +82,7 @@ export default class PopupDetails extends AbstractSmartComponent {
                 </div>
           
                 <section class="film-details__controls">
-                  <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isFilmGoingToWatchlist}>
-                  <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
-          
+                           
                   <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isFilmWatched}>
                   <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
           
@@ -259,16 +256,13 @@ export default class PopupDetails extends AbstractSmartComponent {
         this.rerender();
       });
 
-    element.querySelector(`#watchlist`)
+    element.querySelector(`.film-details__emoji-list`)
       .addEventListener(`change`, () => {
-        this._isGoingToWatchlist = !this._isGoingToWatchlist;
-        this.saveData();
-        this.rerender();
-      });
-
-    element.querySelector(`#watched`)
-      .addEventListener(`change`, () => {
-        this._isWatched = !this._isWatched;
+        this._checkedEmoji = element.querySelectorAll(`.film-details__emoji-item`).map((emoji) => {
+          return emoji.checked;
+        });
+        this._emojiAdd = this._checkedEmoji[0];
+        element.querySelector(`.film-details__add-emoji-label`).append(this._emojiAdd);
         this.saveData();
         this.rerender();
       });

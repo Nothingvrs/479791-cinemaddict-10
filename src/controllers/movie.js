@@ -1,6 +1,7 @@
-import PopupDetails from "../components/popup-details";
-import FilmCard from "../components/card";
-import {render, RenderPosition, togglePopup, replace} from "../utils/render";
+import PopupDetails from '../components/popup-details';
+import FilmCard from '../components/card';
+import {render, RenderPosition, togglePopup, replace} from '../utils/render';
+import AddToWatchlist from '../components/add-to-watchlist';
 
 const siteBodyElement = document.querySelector(`body`);
 
@@ -28,6 +29,10 @@ export default class MovieController {
 
     this._popupElement = new PopupDetails(card);
     this._filmCardElement = new FilmCard(card);
+
+    const controlsPopup = this._popupElement.getElement().querySelector(`.film-details__controls`);
+    const addToWatchlistElement = new AddToWatchlist(card);
+    render(controlsPopup, addToWatchlistElement, RenderPosition.AFTERBEGIN);
 
     this._filmCardElement.getOpenCard(() => {
       this._openPopup();
