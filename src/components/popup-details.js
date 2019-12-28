@@ -5,17 +5,10 @@ export default class PopupDetails extends AbstractSmartComponent {
   constructor(filmDetails) {
     super();
     this._filmCard = filmDetails;
-    this._isFavorite = this._filmCard.isFavorite;
-    this._isWatched = this._filmCard.isWatched;
     this._closeHandler = null;
-    this._emojiAdd = null;
-    this._checkedEmoji = [];
   }
 
   getTemplate() {
-
-    const isFilmWatched = this._filmCard.isWatched ? `checked` : ``;
-    const isFilmFavorite = this._filmCard.isFavorite ? `checked` : ``;
     const HowManyGenres = (this._filmCard.genre.length > 1) ? `Genres` : `Genre`;
 
     return (`<section class="film-details">
@@ -82,12 +75,6 @@ export default class PopupDetails extends AbstractSmartComponent {
                 </div>
           
                 <section class="film-details__controls">
-                           
-                  <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isFilmWatched}>
-                  <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
-          
-                  <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFilmFavorite}>
-                  <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
                 </section>
               </div>
           
@@ -244,42 +231,5 @@ export default class PopupDetails extends AbstractSmartComponent {
 
   getCloseListenerRemove() {
     this._element.querySelector(`.film-details__close-btn`).removeEventListener(`click`, this._closeHandler);
-  }
-
-  _subscribeOnEvents() {
-    const element = this.getElement();
-
-    element.querySelector(`#favorite`)
-      .addEventListener(`change`, () => {
-        this._isFavorite = !this._isFavorite;
-        this.saveData();
-        this.rerender();
-      });
-
-    element.querySelector(`.film-details__emoji-list`)
-      .addEventListener(`change`, () => {
-        this._checkedEmoji = element.querySelectorAll(`.film-details__emoji-item`).map((emoji) => {
-          return emoji.checked;
-        });
-        this._emojiAdd = this._checkedEmoji[0];
-        element.querySelector(`.film-details__add-emoji-label`).append(this._emojiAdd);
-        this.saveData();
-        this.rerender();
-      });
-  }
-
-  recoveryListeners() {
-    this._subscribeOnEvents();
-    this.getClose(this._closeHandler);
-  }
-
-  rerender() {
-    super.rerender();
-  }
-
-  saveData() {
-    this._filmCard.isFavorite = this._isFavorite;
-    this._filmCard.isGoingToWatchlist = this._isGoingToWatchlist;
-    this._filmCard.isWatched = this._isWatched;
   }
 }

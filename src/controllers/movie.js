@@ -2,7 +2,8 @@ import PopupDetails from '../components/popup-details';
 import FilmCard from '../components/card';
 import {render, RenderPosition, togglePopup, replace} from '../utils/render';
 import AddToWatchlist from '../components/add-to-watchlist';
-
+import Watched from '../components/watched';
+import Favorite from '../components/favorite';
 const siteBodyElement = document.querySelector(`body`);
 
 export default class MovieController {
@@ -32,7 +33,12 @@ export default class MovieController {
 
     const controlsPopup = this._popupElement.getElement().querySelector(`.film-details__controls`);
     const addToWatchlistElement = new AddToWatchlist(card);
-    render(controlsPopup, addToWatchlistElement, RenderPosition.AFTERBEGIN);
+    render(controlsPopup, addToWatchlistElement, RenderPosition.BEFOREEND);
+    const bottomContainer = this._popupElement.getElement().querySelector(`.form-details__bottom-container`);
+    const watchedElement = new Watched(card, bottomContainer);
+    render(controlsPopup, watchedElement, RenderPosition.BEFOREEND);
+    const favoriteElement = new Favorite(card);
+    render(controlsPopup, favoriteElement, RenderPosition.BEFOREEND);
 
     this._filmCardElement.getOpenCard(() => {
       this._openPopup();

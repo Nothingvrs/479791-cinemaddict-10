@@ -5,13 +5,16 @@ export default class AddToWatchlist extends AbstractSmartComponent {
     super();
     this._filmCard = card;
     this._isGoingToWatchlist = null;
+    this._subscribeOnEvent();
   }
 
   getTemplate() {
     const isFilmGoingToWatchlist = this._filmCard.isGoingToWatchlist ? `checked` : ``;
 
-    return (`<input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isFilmGoingToWatchlist}>
-    <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>`);
+    return (`<div>
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isFilmGoingToWatchlist}>
+            <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
+            </div>`);
   }
 
   _subscribeOnEvent() {
@@ -19,8 +22,12 @@ export default class AddToWatchlist extends AbstractSmartComponent {
     .addEventListener(`change`, () => {
       this._isGoingToWatchlist = !this._isGoingToWatchlist;
       this.saveData();
-      this.rerender();
+      super.rerender();
     });
+  }
+
+  recoveryListener() {
+    this._subscribeOnEvent();
   }
 
   saveData() {
