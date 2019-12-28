@@ -32,6 +32,5 @@ export default class Favorite extends AbstractSmartComponent {
 
   saveData() {
     this._filmCard.isFavorite = this._isFavorite;
-    this._filmCard.isFavorite = this._isFavorite;
   }
 }

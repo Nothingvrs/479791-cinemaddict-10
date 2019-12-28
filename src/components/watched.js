@@ -1,5 +1,4 @@
 import AbstractSmartComponent from './abstract-smart-component';
-import {render, RenderPosition} from '../utils/render';
 import Rating from './rating';
 
 export default class Watched extends AbstractSmartComponent {
@@ -8,6 +7,7 @@ export default class Watched extends AbstractSmartComponent {
     this._container = container;
     this._filmCard = card;
     this._isWatched = this._filmCard.isWatched;
+    this._ratingElement = new Rating(this._filmCard, this._container);
     this._subscribeOnEvent();
   }
 
@@ -30,14 +30,10 @@ export default class Watched extends AbstractSmartComponent {
   }
 
   rerender() {
-    if (this._isWatched) {
-      render(this._container, new Rating(this._filmCard), RenderPosition.BEFORENODE);
-      super.rerender();
-    } else {
-      super.rerender();
-    }
-
+    this._ratingElement.rerender(this._isWatched);
+    super.rerender();
   }
+
 
   recoveryListener() {
     this._subscribeOnEvent();
