@@ -9,12 +9,13 @@ export default class Watched extends AbstractSmartComponent {
     this._isWatched = this._filmCard.isWatched;
     this._ratingElement = new Rating(this._filmCard, this._container);
     this._subscribeOnEvent();
+    this._ratingElement.renderRating(this._isWatched);
   }
 
   getTemplate() {
     const isFilmWatched = this._filmCard.isWatched ? `checked` : ``;
 
-    return (`<div>
+    return (`<div class="film-details__control-wrap">
              <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isFilmWatched}>
              <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
             </div>`);
@@ -30,7 +31,7 @@ export default class Watched extends AbstractSmartComponent {
   }
 
   rerender() {
-    this._ratingElement.rerender(this._isWatched);
+    this._ratingElement.renderRating(this._isWatched);
     super.rerender();
   }
 

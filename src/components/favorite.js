@@ -11,7 +11,7 @@ export default class Favorite extends AbstractSmartComponent {
   getTemplate() {
     const isFilmFavorite = this._filmCard.isFavorite ? `checked` : ``;
 
-    return (`<div>
+    return (`<div class="film-details__control-wrap">
             <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFilmFavorite}>
             <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
             </div>`);

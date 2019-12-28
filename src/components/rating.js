@@ -57,13 +57,14 @@ export default class Rating extends AbstractComponent {
       </section>
       </div>
       </section>
-      </div>`
-    );
+      </div>`);
   }
 
-  rerender(isWatched) {
+  renderRating(isWatched) {
     if (isWatched) {
-      render(this._container, this.getElement(), RenderPosition.BEFORENODE);
+      render(this._container, this, RenderPosition.BEFORENODE);
+    } else {
+      this.getElement().parentNode.removeChild(this.getElement());
     }
   }
 }

@@ -11,7 +11,7 @@ export default class AddToWatchlist extends AbstractSmartComponent {
   getTemplate() {
     const isFilmGoingToWatchlist = this._filmCard.isGoingToWatchlist ? `checked` : ``;
 
-    return (`<div>
+    return (`<div class="film-details__control-wrap">
             <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isFilmGoingToWatchlist}>
             <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
             </div>`);
