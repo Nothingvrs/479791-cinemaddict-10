@@ -1,6 +1,6 @@
 import AbstractSmartComponent from './abstract-smart-component';
 
-export default class AddToWatchlist extends AbstractSmartComponent {
+export default class PopupAddToWatchlist extends AbstractSmartComponent {
   constructor(card) {
     super();
     this._filmCard = card;

@@ -1,15 +1,15 @@
 import AbstractSmartComponent from './abstract-smart-component';
 import Rating from './rating';
 
-export default class Watched extends AbstractSmartComponent {
+export default class PopupWatched extends AbstractSmartComponent {
   constructor(card, container) {
     super();
     this._container = container;
     this._filmCard = card;
     this._isWatched = this._filmCard.isWatched;
     this._ratingElement = new Rating(this._filmCard, this._container);
-    this._subscribeOnEvent();
     this._ratingElement.renderRating(this._isWatched);
+    this._subscribeOnEvent();
   }
 
   getTemplate() {
@@ -31,8 +31,8 @@ export default class Watched extends AbstractSmartComponent {
   }
 
   rerender() {
-    this._ratingElement.renderRating(this._isWatched);
     super.rerender();
+    this._ratingElement.renderRating(this._isWatched);
   }
 
 
