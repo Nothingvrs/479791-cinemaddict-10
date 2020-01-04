@@ -61,12 +61,12 @@ export default class Rating extends AbstractComponent {
   }
 
   renderRating(isWatched) {
+    if (document.body.contains(this.getElement())) {
+      this.getElement().parentNode.removeChild(this.getElement());
+    }
+
     if (isWatched) {
       render(this._container, this, RenderPosition.BEFORENODE);
-    } else {
-      if (document.body.contains(this.getElement())) {
-        this.getElement().parentNode.removeChild(this.getElement());
-      }
     }
   }
 }

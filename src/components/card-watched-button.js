@@ -1,12 +1,6 @@
-import AbstractSmartComponent from './abstract-smart-component';
+import PopupWatched from './popup-watched-button';
 
-export default class CardWatched extends AbstractSmartComponent {
-  constructor(card) {
-    super();
-    this._filmCard = card;
-    this._isWatched = this._filmCard.isWatched;
-    this._subscribeOnEvent();
-  }
+export default class CardWatched extends PopupWatched {
 
   getTemplate() {
     const getIsWatchedClass = this._filmCard.isWatched ? `film-card__controls-item--active` : ``;
@@ -16,17 +10,7 @@ export default class CardWatched extends AbstractSmartComponent {
 
   _subscribeOnEvent() {
     this.getElement().addEventListener(`click`, () => {
-      this._isWatched = !this._isWatched;
-      this.saveData();
-      super.rerender();
+      super._handler();
     });
-  }
-
-  recoveryListener() {
-    this._subscribeOnEvent();
-  }
-
-  saveData() {
-    this._filmCard.isWatched = this._isWatched;
   }
 }

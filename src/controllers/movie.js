@@ -16,13 +16,13 @@ export default class MovieController {
     this._popupElement = new PopupDetails(this._card);
     this._filmCardElement = new FilmCard(this._card);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    const bottomContainer = this._popupElement.getElement().querySelector(`.form-details__bottom-container`);
     this._cardFavoriteElement = new CardFavorite(this._card);
-    this._cardWatchedElement = new CardWatched(this._card);
+    this._cardWatchedElement = new CardWatched(this._card, bottomContainer);
     this._cardAddToWatchlistElement = new CardAddToWatchlist(this._card);
     this._popupFavoriteElement = new PopupFavorite(this._card);
     this._popupAddToWatchlistElement = new PopupAddToWatchlist(this._card);
-    const bottomContainer = this._popupElement.getElement().querySelector(`.form-details__bottom-container`);
-    this._popupWatchedElement = new PopupWatched(this._card, bottomContainer, this._popupElement);
+    this._popupWatchedElement = new PopupWatched(this._card, bottomContainer);
   }
 
   _onEscKeyDown(evt) {

@@ -1,12 +1,6 @@
-import AbstractSmartComponent from './abstract-smart-component';
+import PopupAddToWatchlist from './popup-add-to-watchlist-button';
 
-export default class CardAddToWatchlist extends AbstractSmartComponent {
-  constructor(card) {
-    super();
-    this._filmCard = card;
-    this._isWatchlist = this._filmCard.isGoingToWatchlist;
-    this._subscribeOnEvent();
-  }
+export default class CardAddToWatchlist extends PopupAddToWatchlist {
 
   getTemplate() {
     const getIsWatchlist = this._filmCard.isGoingToWatchlist ? `film-card__controls-item--active` : ``;
@@ -16,17 +10,7 @@ export default class CardAddToWatchlist extends AbstractSmartComponent {
 
   _subscribeOnEvent() {
     this.getElement().addEventListener(`click`, () => {
-      this._isWatchlist = !this._isWatchlist;
-      this.saveData();
-      super.rerender();
+      super._handler();
     });
-  }
-
-  recoveryListener() {
-    this._subscribeOnEvent();
-  }
-
-  saveData() {
-    this._filmCard.isGoingToWatchlist = this._isWatchlist;
   }
 }

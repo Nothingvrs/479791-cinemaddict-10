@@ -1,12 +1,6 @@
-import AbstractSmartComponent from './abstract-smart-component';
+import PopupFavorite from "./popup-favorite-button";
 
-export default class CardFavorite extends AbstractSmartComponent {
-  constructor(card) {
-    super();
-    this._filmCard = card;
-    this._isFavorite = this._filmCard.isFavorite;
-    this._subscribeOnEvent();
-  }
+export default class CardFavorite extends PopupFavorite {
 
   getTemplate() {
     const getIsFavoriteClass = this._filmCard.isFavorite ? `film-card__controls-item--active` : ``;
@@ -16,17 +10,7 @@ export default class CardFavorite extends AbstractSmartComponent {
 
   _subscribeOnEvent() {
     this.getElement().addEventListener(`click`, () => {
-      this._isFavorite = !this._isFavorite;
-      this.saveData();
-      super.rerender();
+      super._handler();
     });
-  }
-
-  recoveryListener() {
-    this._subscribeOnEvent();
-  }
-
-  saveData() {
-    this._filmCard.isFavorite = this._isFavorite;
   }
 }
