@@ -10,7 +10,7 @@ export default class CardAddToWatchlist extends PopupAddToWatchlist {
 
   _subscribeOnEvent() {
     this.getElement().addEventListener(`click`, () => {
-      this.__saveAndRerender();
+      this._saveAndRerender();
     });
   }
 }

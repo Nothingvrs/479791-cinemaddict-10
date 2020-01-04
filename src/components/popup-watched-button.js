@@ -22,7 +22,7 @@ export default class PopupWatched extends AbstractSmartComponent {
   _subscribeOnEvent() {
     this.getElement().querySelector(`#watched`)
       .addEventListener(`change`, () => {
-        this.__saveAndRerender();
+        this._saveAndRerender();
       });
   }
 
@@ -30,14 +30,8 @@ export default class PopupWatched extends AbstractSmartComponent {
     this._subscribeOnEvent();
   }
 
-  saveData() {
-    this._filmCard.isWatched = this._isWatched;
-  }
-
-  __saveAndRerender() {
-    this._isWatched = this._filmCard.isWatched;
-    this._isWatched = !this._isWatched;
-    this.saveData();
+  _saveAndRerender() {
+    this._filmCard.isWatched = !this._filmCard.isWatched;
     this.rerender();
     this._ratingElement.renderRating(this._filmCard.isWatched);
   }
