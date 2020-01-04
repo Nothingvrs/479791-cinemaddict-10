@@ -4,7 +4,6 @@ export default class PopupFavorite extends AbstractSmartComponent {
   constructor(card) {
     super();
     this._filmCard = card;
-    this._isFavorite = this._filmCard.isFavorite;
     this._subscribeOnEvent();
   }
 
@@ -19,7 +18,7 @@ export default class PopupFavorite extends AbstractSmartComponent {
 
   _subscribeOnEvent() {
     this.getElement().querySelector(`#favorite`).addEventListener(`change`, () => {
-      this._handler();
+      this._saveAndRerender();
     });
   }
 
@@ -31,9 +30,10 @@ export default class PopupFavorite extends AbstractSmartComponent {
     this._filmCard.isFavorite = this._isFavorite;
   }
 
-  _handler() {
+  _saveAndRerender() {
+    this._isFavorite = this._filmCard.isFavorite;
     this._isFavorite = !this._isFavorite;
     this.saveData();
-    super.rerender();
+    this.rerender();
   }
 }

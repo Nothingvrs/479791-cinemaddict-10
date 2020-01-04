@@ -10,7 +10,7 @@ export default class CardWatched extends PopupWatched {
 
   _subscribeOnEvent() {
     this.getElement().addEventListener(`click`, () => {
-      super._handler();
+      this.__saveAndRerender();
     });
   }
 }

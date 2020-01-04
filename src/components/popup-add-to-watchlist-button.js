@@ -4,7 +4,6 @@ export default class PopupAddToWatchlist extends AbstractSmartComponent {
   constructor(card) {
     super();
     this._filmCard = card;
-    this._isGoingToWatchlist = this._filmCard.isGoingToWatchlist;
     this._subscribeOnEvent();
   }
 
@@ -20,7 +19,7 @@ export default class PopupAddToWatchlist extends AbstractSmartComponent {
   _subscribeOnEvent() {
     this.getElement().querySelector(`#watchlist`)
     .addEventListener(`change`, () => {
-      this._handler();
+      this.__saveAndRerender();
     });
   }
 
@@ -32,9 +31,10 @@ export default class PopupAddToWatchlist extends AbstractSmartComponent {
     this._filmCard.isGoingToWatchlist = this._isGoingToWatchlist;
   }
 
-  _handler() {
+  __saveAndRerender() {
+    this._isGoingToWatchlist = this._filmCard.isGoingToWatchlist;
     this._isGoingToWatchlist = !this._isGoingToWatchlist;
     this.saveData();
-    super.rerender();
+    this.rerender();
   }
 }

@@ -10,7 +10,7 @@ export default class CardFavorite extends PopupFavorite {
 
   _subscribeOnEvent() {
     this.getElement().addEventListener(`click`, () => {
-      super._handler();
+      this._saveAndRerender();
     });
   }
 }
