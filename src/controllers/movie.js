@@ -6,29 +6,26 @@ import PopupFavorite from '../components/popup-favorite-button';
 import PopupWatched from '../components/popup-watched-button';
 import CardFavorite from '../components/card-favorite-button';
 import CardWatched from '../components/card-watched-button';
-import CardAddToWatchlist from "../components/card-add-to-watchlist-button";
-const siteBodyElement = document.querySelector(`body`);
+import CardAddToWatchlist from '../components/card-add-to-watchlist-button';
+import Comments from '../components/comments';
 
-const Mode = {
-  DEFAULT: `default`,
-  POPUP: `popup`,
-};
+const siteBodyElement = document.querySelector(`body`);
 
 export default class MovieController {
   constructor(container, card) {
     this._card = card;
     this._container = container;
-    this._mode = Mode.DEFAULT;
     this._popupElement = new PopupDetails(this._card);
     this._filmCardElement = new FilmCard(this._card);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
-    const bottomContainer = this._popupElement.getElement().querySelector(`.form-details__bottom-container`);
+    this._topContainer = this._popupElement.getElement().querySelector(`.form-details__top-container`);
     this._cardFavoriteElement = new CardFavorite(this._card);
-    this._cardWatchedElement = new CardWatched(this._card, bottomContainer);
+    this._cardWatchedElement = new CardWatched(this._card, this._topContainer);
     this._cardAddToWatchlistElement = new CardAddToWatchlist(this._card);
     this._popupFavoriteElement = new PopupFavorite(this._card);
     this._popupAddToWatchlistElement = new PopupAddToWatchlist(this._card);
-    this._popupWatchedElement = new PopupWatched(this._card, bottomContainer);
+    this._popupWatchedElement = new PopupWatched(this._card, this._topContainer);
+    this._commentsElement = new Comments();
   }
 
   _onEscKeyDown(evt) {
@@ -41,6 +38,8 @@ export default class MovieController {
   }
 
   render() {
+    render(this._topContainer, this._commentsElement, RenderPosition.AFTERNODE);
+
     const controlsPopup = this._popupElement.getElement().querySelector(`.film-details__controls`);
     render(controlsPopup, this._popupAddToWatchlistElement, RenderPosition.BEFOREEND);
     render(controlsPopup, this._popupWatchedElement, RenderPosition.BEFOREEND);
@@ -52,6 +51,7 @@ export default class MovieController {
     render(controlsCard, this._cardFavoriteElement, RenderPosition.BEFOREEND);
 
     this._filmCardElement.getOpenCard(() => {
+      this._isOpenPopup();
       this._openPopup();
       document.addEventListener(`keydown`, this._onEscKeyDown);
       this._popupElement.getClose(() => {
@@ -69,7 +69,6 @@ export default class MovieController {
     this._popupFavoriteElement.rerender();
     this._popupAddToWatchlistElement.rerender();
     this._popupWatchedElement.rerender();
-    this._mode = Mode.POPUP;
   }
 
   _closePopup() {
@@ -77,12 +76,11 @@ export default class MovieController {
     this._cardFavoriteElement.rerender();
     this._cardAddToWatchlistElement.rerender();
     this._cardWatchedElement.rerender();
-    this._mode = Mode.DEFAULT;
   }
 
-  setDefaultView() {
-    if (this._mode !== Mode.DEFAULT) {
-      this._closePopup();
+  _isOpenPopup() {
+    if (document.body.querySelector(`.film-details`)) {
+      document.body.querySelector(`.film-details`).parentNode.removeChild(document.body.querySelector(`.film-details`));
     }
   }
 }
