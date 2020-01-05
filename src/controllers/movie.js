@@ -9,16 +9,10 @@ import CardWatched from '../components/card-watched-button';
 import CardAddToWatchlist from "../components/card-add-to-watchlist-button";
 const siteBodyElement = document.querySelector(`body`);
 
-const Mode = {
-  DEFAULT: `default`,
-  POPUP: `popup`,
-};
-
 export default class MovieController {
   constructor(container, card) {
     this._card = card;
     this._container = container;
-    this._mode = Mode.DEFAULT;
     this._popupElement = new PopupDetails(this._card);
     this._filmCardElement = new FilmCard(this._card);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
@@ -52,6 +46,7 @@ export default class MovieController {
     render(controlsCard, this._cardFavoriteElement, RenderPosition.BEFOREEND);
 
     this._filmCardElement.getOpenCard(() => {
+      this._isOpenPopup();
       this._openPopup();
       document.addEventListener(`keydown`, this._onEscKeyDown);
       this._popupElement.getClose(() => {
@@ -69,7 +64,6 @@ export default class MovieController {
     this._popupFavoriteElement.rerender();
     this._popupAddToWatchlistElement.rerender();
     this._popupWatchedElement.rerender();
-    this._mode = Mode.POPUP;
   }
 
   _closePopup() {
@@ -77,12 +71,11 @@ export default class MovieController {
     this._cardFavoriteElement.rerender();
     this._cardAddToWatchlistElement.rerender();
     this._cardWatchedElement.rerender();
-    this._mode = Mode.DEFAULT;
   }
 
-  setDefaultView() {
-    if (this._mode !== Mode.DEFAULT) {
-      this._closePopup();
+  _isOpenPopup() {
+    if (document.body.querySelector(`.film-details`)) {
+      document.body.querySelector(`.film-details`).parentNode.removeChild(document.body.querySelector(`.film-details`));
     }
   }
 }

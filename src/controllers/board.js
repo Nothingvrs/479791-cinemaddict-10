@@ -46,8 +46,7 @@ export default class BoardController {
       this._showingCardsCount = FILM_CARD_AMOUNT_ON_START;
       const newCards = renderCards(
           this._container,
-          this._cards.slice(0, this._showingCardsCount),
-          this._onViewChange());
+          this._cards.slice(0, this._showingCardsCount));
       this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
 
       this.renderLoadMoreButton(this._cards);
@@ -73,8 +72,7 @@ export default class BoardController {
 
       const newCards = renderCards(
           this._container,
-          this._cards.slice(prevCardsCount, this._showingCardsCount),
-          this._onViewChange());
+          this._cards.slice(prevCardsCount, this._showingCardsCount));
       this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
 
       if (this._showingCardsCount >= filmCards.length) {
@@ -107,10 +105,6 @@ export default class BoardController {
     }
   }
 
-  _onViewChange() {
-    this._showedCardsControllers.forEach((it) => it.setDefaultView());
-  }
-
   renderTopRatingFilms(cards) {
     const topRatingFilms = cards
       .sort((film1, film2) => (film2.rating - film1.rating))
@@ -120,7 +114,7 @@ export default class BoardController {
       render(this._board, new ExtraFilms(`Top rated`), RenderPosition.BEFOREEND);
       const extraFilmsContainerElement = document.querySelector(`.films-list--extra`);
       const extraFilmsBoardElement = extraFilmsContainerElement.querySelector(`.films-list__container`);
-      renderCards(extraFilmsBoardElement, topRatingFilms, this._onViewChange());
+      renderCards(extraFilmsBoardElement, topRatingFilms);
     }
   }
 
@@ -133,7 +127,7 @@ export default class BoardController {
       render(this._board, new ExtraFilms(`MostCommented`), RenderPosition.BEFOREEND);
       const extraFilmsContainerElement = document.querySelectorAll(`.films-list--extra`);
       const extraFilmsBoardElement = extraFilmsContainerElement[1].querySelector(`.films-list__container`);
-      renderCards(extraFilmsBoardElement, topCommentsFilms, this._onViewChange());
+      renderCards(extraFilmsBoardElement, topCommentsFilms);
     }
   }
 }
