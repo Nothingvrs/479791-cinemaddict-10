@@ -4,6 +4,10 @@ export const generateRandomBoolean = () => Math.random() > 0.5;
 
 export const getRandomValue = (values) => values[generateRandomNumber(values.length)];
 
+export const randomDate = (start, end) => {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+};
+
 export const getRandomArrayElements = (array, amount) => {
   let newArray = [];
 
@@ -19,10 +23,12 @@ export const Time = {
   MINUTE: 60,
 };
 
-export const formatDate = (date) => {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const day = date.getDate();
+import moment from 'moment';
 
-  return `${day} ${month} ${year}`;
+export const formatDate = (date) => {
+  return moment(date).format(`DD MMMM YYYY`);
+};
+
+export const formatCommentDate = (date) => {
+  return moment(date).fromNow();
 };

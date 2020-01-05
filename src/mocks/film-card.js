@@ -1,4 +1,5 @@
 import {
+  randomDate,
   getRandomValue,
   generateRandomNumber,
   getRandomArrayElements,
@@ -87,10 +88,6 @@ new Date().toLocaleString(`ru`, {
   month: `long`,
   day: `numeric`
 });
-
-const randomDate = (start, end) => {
-  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-};
 
 const generateFilmCard = () => {
   const datePremiere = randomDate(new Date(1900, 1, 1), new Date());

@@ -66,7 +66,7 @@ export default class Rating extends AbstractComponent {
     }
 
     if (isWatched) {
-      render(this._container, this, RenderPosition.BEFORENODE);
+      render(this._container, this, RenderPosition.AFTERNODE);
     }
   }
 }

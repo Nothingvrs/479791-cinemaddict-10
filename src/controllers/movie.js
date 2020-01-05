@@ -6,7 +6,9 @@ import PopupFavorite from '../components/popup-favorite-button';
 import PopupWatched from '../components/popup-watched-button';
 import CardFavorite from '../components/card-favorite-button';
 import CardWatched from '../components/card-watched-button';
-import CardAddToWatchlist from "../components/card-add-to-watchlist-button";
+import CardAddToWatchlist from '../components/card-add-to-watchlist-button';
+import Comments from '../components/comments';
+
 const siteBodyElement = document.querySelector(`body`);
 
 export default class MovieController {
@@ -16,13 +18,14 @@ export default class MovieController {
     this._popupElement = new PopupDetails(this._card);
     this._filmCardElement = new FilmCard(this._card);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
-    const bottomContainer = this._popupElement.getElement().querySelector(`.form-details__bottom-container`);
+    this._topContainer = this._popupElement.getElement().querySelector(`.form-details__top-container`);
     this._cardFavoriteElement = new CardFavorite(this._card);
-    this._cardWatchedElement = new CardWatched(this._card, bottomContainer);
+    this._cardWatchedElement = new CardWatched(this._card, this._topContainer);
     this._cardAddToWatchlistElement = new CardAddToWatchlist(this._card);
     this._popupFavoriteElement = new PopupFavorite(this._card);
     this._popupAddToWatchlistElement = new PopupAddToWatchlist(this._card);
-    this._popupWatchedElement = new PopupWatched(this._card, bottomContainer);
+    this._popupWatchedElement = new PopupWatched(this._card, this._topContainer);
+    this._commentsElement = new Comments();
   }
 
   _onEscKeyDown(evt) {
@@ -35,6 +38,8 @@ export default class MovieController {
   }
 
   render() {
+    render(this._topContainer, this._commentsElement, RenderPosition.AFTERNODE);
+
     const controlsPopup = this._popupElement.getElement().querySelector(`.film-details__controls`);
     render(controlsPopup, this._popupAddToWatchlistElement, RenderPosition.BEFOREEND);
     render(controlsPopup, this._popupWatchedElement, RenderPosition.BEFOREEND);
