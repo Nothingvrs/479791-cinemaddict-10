@@ -1,14 +1,16 @@
 import {formatDate, Time} from '../utils/common.js';
-import AbstractComponent from './abstract-component';
+import AbstractSmartComponent from './abstract-smart-component';
 
-export default class PopupDetails extends AbstractComponent {
+export default class PopupDetails extends AbstractSmartComponent {
   constructor(filmDetails) {
     super();
-    this._filmDetails = filmDetails;
+    this._filmCard = filmDetails;
+    this._closeHandler = null;
   }
 
   getTemplate() {
-    this.filmFeatures();
+    const HowManyGenres = (this._filmCard.genre.length > 1) ? `Genres` : `Genre`;
+
     return (`<section class="film-details">
             <form class="film-details__inner" action="" method="get">
               <div class="form-details__top-container">
@@ -17,73 +19,65 @@ export default class PopupDetails extends AbstractComponent {
                 </div>
                 <div class="film-details__info-wrap">
                   <div class="film-details__poster">
-                    <img class="film-details__poster-img" src=${this._filmDetails.poster} alt="">
+                    <img class="film-details__poster-img" src=${this._filmCard.poster} alt="">
           
-                    <p class="film-details__age">${this._filmDetails.restrictions}+</p>
+                    <p class="film-details__age">${this._filmCard.restrictions}+</p>
                   </div>
           
                   <div class="film-details__info">
                     <div class="film-details__info-head">
                       <div class="film-details__title-wrap">
-                        <h3 class="film-details__title">${this._filmDetails.title}</h3>
-                        <p class="film-details__title-original">Original: ${this._filmDetails.title}</p>
+                        <h3 class="film-details__title">${this._filmCard.title}</h3>
+                        <p class="film-details__title-original">Original: ${this._filmCard.title}</p>
                       </div>
           
                       <div class="film-details__rating">
-                        <p class="film-details__total-rating">${this._filmDetails.rating}</p>
+                        <p class="film-details__total-rating">${this._filmCard.rating}</p>
                       </div>
                     </div>
           
                     <table class="film-details__table">
                       <tr class="film-details__row">
                         <td class="film-details__term">Director</td>
-                        <td class="film-details__cell">${this._filmDetails.director}</td>
+                        <td class="film-details__cell">${this._filmCard.director}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Writers</td>
-                        <td class="film-details__cell">${this._filmDetails.writers}</td>
+                        <td class="film-details__cell">${this._filmCard.writers}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Actors</td>
-                        <td class="film-details__cell">${this._filmDetails.actors}</td>
+                        <td class="film-details__cell">${this._filmCard.actors}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Release Date</td>
-                        <td class="film-details__cell">${formatDate(this._filmDetails.premiere)}</td>
+                        <td class="film-details__cell">${formatDate(this._filmCard.premiere)}</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Runtime</td>
-                        <td class="film-details__cell">${Math.floor(this._filmDetails.duration / Time.HOUR)}h&nbsp;${this._filmDetails.duration % Time.HOUR}m</td>
+                        <td class="film-details__cell">${Math.floor(this._filmCard.duration / Time.HOUR)}h&nbsp;${this._filmCard.duration % Time.HOUR}m</td>
                       </tr>
                       <tr class="film-details__row">
                         <td class="film-details__term">Country</td>
-                        <td class="film-details__cell">${this._filmDetails.country}</td>
+                        <td class="film-details__cell">${this._filmCard.country}</td>
                       </tr>
                       <tr class="film-details__row">
-                        <td class="film-details__term">Genres</td>
+                        <td class="film-details__term">${HowManyGenres}</td>
                         <td class="film-details__cell">
-                          <span class="film-details__genre">${this._filmDetails.genre}</span>
+                          <span class="film-details__genre">${this._filmCard.genre}</span>
                       </tr>
                     </table>
           
                     <p class="film-details__film-description">
-                      ${this._filmDetails.description}
+                      ${this._filmCard.description}
                     </p>
                   </div>
                 </div>
           
                 <section class="film-details__controls">
-                  <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
-                  <label for="watchlist" class="film-details__control-label film-card__controls-item--watchlist">Add to watchlist</label>
-          
-                  <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
-                  <label for="watched" class="film-details__control-label film-card__controls-item--watched">Already watched</label>
-          
-                  <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
-                  <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
                 </section>
               </div>
-          
+                    
               <div class="form-details__bottom-container">
                 <section class="film-details__comments-wrap">
                   <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
@@ -180,19 +174,10 @@ export default class PopupDetails extends AbstractComponent {
 
   getClose(handler) {
     this._element.querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
+    this._closeHandler = handler;
   }
 
-  filmFeatures() {
-    this._favorite = () => {
-      return (this._filmDetails.isFavorite) ? `film-card__controls-item--favorite` : ``;
-    };
-
-    this._watched = () => {
-      return (this._filmDetails.isWatched) ? `film-card__controls-item--favorite` : ``;
-    };
-
-    this._watchList = () => {
-      return (this._filmDetails.isGoingToWatchlist) ? `film-card__controls-item--favorite` : ``;
-    };
+  getCloseListenerRemove() {
+    this._element.querySelector(`.film-details__close-btn`).removeEventListener(`click`, this._closeHandler);
   }
 }

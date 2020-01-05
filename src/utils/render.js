@@ -1,6 +1,7 @@
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
+  BEFOREEND: `beforeend`,
+  BEFORENODE: `beforenode`
 };
 
 export const createElement = (template) => {
@@ -18,6 +19,21 @@ export const render = (container, component, place) => {
     case RenderPosition.BEFOREEND:
       container.append(component.getElement());
       break;
+    case RenderPosition.BEFORENODE:
+      container.before(component.getElement());
+      break;
+  }
+};
+
+export const replace = (newComponent, oldComponent) => {
+  const parentElement = oldComponent.getElement().parentElement;
+  const newElement = newComponent.getElement();
+  const oldElement = oldComponent.getElement();
+
+  const isExistElements = !!(parentElement && newElement && oldElement);
+
+  if (isExistElements && parentElement.contains(oldElement)) {
+    parentElement.replaceChild(newElement, oldElement);
   }
 };
 
