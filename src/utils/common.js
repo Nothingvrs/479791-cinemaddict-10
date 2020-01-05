@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const generateRandomNumber = (max, min = 0) => Math.floor(Math.random() * (max - min)) + min;
 
 export const generateRandomBoolean = () => Math.random() > 0.5;
@@ -22,8 +24,6 @@ export const Time = {
   HOUR: 60,
   MINUTE: 60,
 };
-
-import moment from 'moment';
 
 export const formatDate = (date) => {
   return moment(date).format(`DD MMMM YYYY`);
