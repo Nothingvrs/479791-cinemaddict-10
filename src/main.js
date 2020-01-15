@@ -1,6 +1,7 @@
 import Search from './components/search';
-import Menu from './components/menu';
+import FilterController from './controllers/filter';
 import Profile from './components/profile';
+import Movies from './models/movies.js';
 import {generateFimCards} from './mocks/film-card';
 import {render, RenderPosition} from './utils/render';
 import BoardController from "./controllers/board";
@@ -8,18 +9,21 @@ import BoardController from "./controllers/board";
 const FILM_CARD_COUNT = 12;
 
 const filmCards = generateFimCards(FILM_CARD_COUNT);
+const movieModel = new Movies();
+movieModel.setCards(filmCards);
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 
 render(siteHeaderElement, new Search(), RenderPosition.BEFOREEND);
 render(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
-render(siteMainElement, new Menu(filmCards), RenderPosition.BEFOREEND);
+const filterController = new FilterController(siteMainElement, movieModel);
+filterController.render();
 
-const boardController = new BoardController();
-boardController.renderFilmCards(filmCards);
+const boardController = new BoardController(movieModel);
+boardController.renderFilmCards(movieModel);
 
-boardController.renderTopRatingFilms(filmCards);
+boardController.renderTopRatingFilms();
 
-boardController.renderTopCommentsFilms(filmCards);
+boardController.renderTopCommentsFilms();
 
 
