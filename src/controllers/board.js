@@ -12,9 +12,9 @@ const FILM_CARD_AMOUNT_ON_START = 5;
 
 const siteMainElement = document.querySelector(`.main`);
 
-const renderCards = (cardListElement, cards, filters) => {
+const renderCards = (cardListElement, cards, movieModel) => {
   return cards.map((card) => {
-    const movieController = new MovieController(cardListElement, card, filters);
+    const movieController = new MovieController(cardListElement, card, movieModel);
     movieController.render();
 
     return movieController;
@@ -22,11 +22,10 @@ const renderCards = (cardListElement, cards, filters) => {
 };
 
 export default class BoardController {
-  constructor(movieModel, filters) {
+  constructor(movieModel) {
     this._container = null;
     this._movieModel = movieModel;
     this._board = null;
-    this.filters = filters;
     this._loadMoreButton = new LoadMoreButton();
     this._showingCardsCount = null;
     this._sortComponent = new Sort();
@@ -65,7 +64,7 @@ export default class BoardController {
   }
 
   _renderCards(cards) {
-    const newCards = renderCards(this._container, cards);
+    const newCards = renderCards(this._container, cards, this._movieModel);
     this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
     this._showingCardsCount = this._showedCardsControllers.length;
   }

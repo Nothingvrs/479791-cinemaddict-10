@@ -12,8 +12,9 @@ import Comments from '../components/comments';
 const siteBodyElement = document.querySelector(`body`);
 
 export default class MovieController {
-  constructor(container, card) {
+  constructor(container, card, movieModel) {
     this._card = card;
+    this._movieModel = movieModel;
     this._container = container;
     this._popupElement = new PopupDetails(this._card);
     this._filmCardElement = new FilmCard(this._card);
@@ -22,9 +23,9 @@ export default class MovieController {
     this._cardFavoriteElement = new CardFavorite(this._card);
     this._cardWatchedElement = new CardWatched(this._card, this._topContainer);
     this._cardAddToWatchlistElement = new CardAddToWatchlist(this._card);
-    this._popupFavoriteElement = new PopupFavorite(this._card);
-    this._popupAddToWatchlistElement = new PopupAddToWatchlist(this._card);
-    this._popupWatchedElement = new PopupWatched(this._card, this._topContainer);
+    this._popupFavoriteElement = new PopupFavorite(this._card, this._onDataChangeFavoriteFilter);
+    this._popupAddToWatchlistElement = new PopupAddToWatchlist(this._card, this._onDataChangeWatchlistFilter);
+    this._popupWatchedElement = new PopupWatched(this._card, this._topContainer, this._onDataChangeWatchedFilter);
     this._commentsElement = new Comments();
   }
 
@@ -81,6 +82,30 @@ export default class MovieController {
   _isOpenPopup() {
     if (document.body.querySelector(`.film-details`)) {
       document.body.querySelector(`.film-details`).parentNode.removeChild(document.body.querySelector(`.film-details`));
+    }
+  }
+
+  _onDataChangeFavoriteFilter(CardController, oldData, newData) {
+    const isSuccess = this._movieModel.updateCard(oldData.id, newData);
+
+    if (isSuccess) {
+      this._popupFavoriteElement.rerender();
+    }
+  }
+
+  _onDataChangeWatchedFilter(CardController, oldData, newData) {
+    const isSuccess = this._movieModel.updateCard(oldData.id, newData);
+
+    if (isSuccess) {
+      this._popupWatchedElement.rerender();
+    }
+  }
+
+  _onDataChangeWatchlistFilter(cardController, oldData, newData) {
+    const isSuccess = this._movieModel.updateCard(oldData.id, newData);
+
+    if (isSuccess) {
+      this._popupAddToWatchlistElement.rerender();
     }
   }
 }

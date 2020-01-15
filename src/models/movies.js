@@ -33,4 +33,18 @@ export default class Movies {
   setFilterChangeHandler(handler) {
     this._filterChangeHandlers.push(handler);
   }
+
+  updateCard(id, card) {
+    const index = this._filmCards.findIndex((it) => it.id === id);
+
+    if (index === -1) {
+      return false;
+    }
+
+    this._filmCards = [].concat(this._filmCards.slice(0, index), card, this._filmCards.slice(index + 1));
+
+    this._dataChangeHandlers.forEach((handler) => handler());
+
+    return true;
+  }
 }

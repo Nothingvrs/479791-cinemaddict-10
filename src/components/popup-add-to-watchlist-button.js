@@ -1,8 +1,9 @@
 import AbstractSmartComponent from './abstract-smart-component';
 
 export default class PopupAddToWatchlist extends AbstractSmartComponent {
-  constructor(card) {
+  constructor(card, onDataChange) {
     super();
+    this._onDataChange = onDataChange;
     this._filmCard = card;
     this._subscribeOnEvent();
   }
