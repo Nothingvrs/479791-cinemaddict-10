@@ -1,19 +1,16 @@
 import AbstractSmartComponent from './abstract-smart-component';
-import Comment from './comment';
-import {generateComments} from '../mocks/comments';
-import {render, RenderPosition} from '../utils/render';
 
 export default class Comments extends AbstractSmartComponent {
-  constructor() {
+  constructor(count) {
     super();
-    this._comments = generateComments(4);
-    this._renderComments();
+    this._count = count;
+    this._emojiAdd();
   }
 
   getTemplate() {
     return (`<div class="form-details__bottom-container">
                 <section class="film-details__comments-wrap">
-                  <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
+                  <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${this._count}</span></h3>
           
                   <ul class="film-details__comments-list">
                     
@@ -54,10 +51,20 @@ export default class Comments extends AbstractSmartComponent {
           </section>\`);`);
   }
 
-  _renderComments() {
-    const commentsList = this.getElement().querySelector(`.film-details__comments-list`);
-    this._comments.forEach((comment) => {
-      render(commentsList, new Comment(comment), RenderPosition.BEFOREEND);
+  remove() {
+    this.getElement().parentNode.removeChild(this.getElement());
+  }
+
+  _emojiAdd() {
+    const emojiAddContainer = this.getElement().querySelector(`.film-details__add-emoji-label`);
+    const emojiOption = this.getElement().querySelectorAll(`.film-details__emoji-item`);
+
+    emojiOption.forEach((emoji) => {
+      emoji.addEventListener(`change`, (evt) => {
+        let label = document.querySelector(`[for="${evt.target.id}"]`);
+        emojiAddContainer.innerHTML = ``;
+        emojiAddContainer.innerHTML = label.innerHTML;
+      });
     });
   }
 }

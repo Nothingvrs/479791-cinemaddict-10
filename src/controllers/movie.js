@@ -7,7 +7,7 @@ import PopupWatched from '../components/popup-watched-button';
 import CardFavorite from '../components/card-favorite-button';
 import CardWatched from '../components/card-watched-button';
 import CardAddToWatchlist from '../components/card-add-to-watchlist-button';
-import Comments from '../components/comments';
+import CommentsController from './comments';
 
 const siteBodyElement = document.querySelector(`body`);
 
@@ -22,14 +22,16 @@ export default class MovieController {
     this._onDataChangeFavoriteFilter = this._onDataChangeFavoriteFilter.bind(this);
     this._onDataChangeWatchedFilter = this._onDataChangeWatchedFilter.bind(this);
     this._onDataChangeWatchlistFilter = this._onDataChangeWatchlistFilter.bind(this);
+    this._onCtrlEnterKeyDown = this._onCtrlEnterKeyDown.bind(this);
     this._topContainer = this._popupElement.getElement().querySelector(`.form-details__top-container`);
+    this._PopupInnerContainer = this._popupElement.getElement().querySelector(`form`);
     this._cardFavoriteElement = new CardFavorite(this._card, this._onDataChangeFavoriteFilter);
     this._cardWatchedElement = new CardWatched(this._card, this._topContainer, this._onDataChangeWatchedFilter);
     this._cardAddToWatchlistElement = new CardAddToWatchlist(this._card, this._onDataChangeWatchlistFilter);
     this._popupFavoriteElement = new PopupFavorite(this._card, this._onDataChangeFavoriteFilter);
     this._popupAddToWatchlistElement = new PopupAddToWatchlist(this._card, this._onDataChangeWatchlistFilter);
     this._popupWatchedElement = new PopupWatched(this._card, this._topContainer, this._onDataChangeWatchedFilter);
-    this._commentsElement = new Comments();
+    this._commentsElement = new CommentsController(this._PopupInnerContainer);
   }
 
   _onEscKeyDown(evt) {
@@ -41,8 +43,14 @@ export default class MovieController {
     }
   }
 
+  _onCtrlEnterKeyDown(evt) {
+    if (evt.keyCode === 13 && evt.keyCode === 13) {
+      this._commentsElement.onCommentAdd();
+    }
+  }
+
   render() {
-    render(this._topContainer, this._commentsElement, RenderPosition.AFTERNODE);
+    this._commentsElement._renderComments();
 
     const controlsPopup = this._popupElement.getElement().querySelector(`.film-details__controls`);
     render(controlsPopup, this._popupAddToWatchlistElement, RenderPosition.BEFOREEND);
@@ -73,6 +81,7 @@ export default class MovieController {
     this._popupFavoriteElement.rerender();
     this._popupAddToWatchlistElement.rerender();
     this._popupWatchedElement.rerender();
+    document.addEventListener(`keydown`, this._onCtrlEnterKeyDown);
   }
 
   _closePopup() {
@@ -80,6 +89,7 @@ export default class MovieController {
     this._cardFavoriteElement.rerender();
     this._cardAddToWatchlistElement.rerender();
     this._cardWatchedElement.rerender();
+    document.removeEventListener(`keydown`, this._onCtrlEnterKeyDown);
   }
 
   _isOpenPopup() {

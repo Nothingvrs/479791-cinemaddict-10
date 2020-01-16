@@ -20,6 +20,12 @@ export const getRandomArrayElements = (array, amount) => {
   return newArray;
 };
 
+export const getRandomArrayElement = (array) => {
+  const rand = Math.floor(Math.random() * array.length);
+
+  return (array[rand]);
+};
+
 export const Time = {
   HOUR: 60,
   MINUTE: 60,

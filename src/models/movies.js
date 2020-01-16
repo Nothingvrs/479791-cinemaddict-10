@@ -1,9 +1,11 @@
 import {getTasksByFilter} from '../utils/filter.js';
 import {FilterType} from '../const.js';
 
+
 export default class Movies {
   constructor() {
     this._filmCards = [];
+    this._comments = [];
     this._activeFilterType = FilterType.ALL;
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
