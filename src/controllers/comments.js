@@ -4,6 +4,7 @@ import Comments from '../components/comments';
 import {render, RenderPosition} from '../utils/render';
 import {generateComments} from '../mocks/comments';
 import {getRandomArrayElement} from "../utils/common";
+import he from 'he';
 
 const authorComment = [
   `Tim Macoveev`,
@@ -52,7 +53,7 @@ export default class CommentsController extends AbstractComponent {
 
     return {
       author: getRandomArrayElement(authorComment),
-      text: window.he.encode(formData.get(`comment`)),
+      text: he.encode(formData.get(`comment`)),
       emoji: selectedEmoji,
       date: new Date(),
     };
