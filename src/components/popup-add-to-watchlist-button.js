@@ -12,13 +12,13 @@ export default class PopupAddToWatchlist extends AbstractSmartComponent {
     const isFilmGoingToWatchlist = this._filmCard.isGoingToWatchlist ? `checked` : ``;
 
     return (`<div class="film-details__control-wrap">
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isFilmGoingToWatchlist}>
-            <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="going_to_watchlist" name="watchlist" ${isFilmGoingToWatchlist}>
+            <label for="going_to_watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
             </div>`);
   }
 
   _subscribeOnEvent() {
-    this.getElement().querySelector(`#watchlist`)
+    this.getElement().querySelector(`#going_to_watchlist`)
     .addEventListener(`change`, () => {
       this._saveAndRerender();
     });
