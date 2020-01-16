@@ -46,11 +46,14 @@ export default class CommentsController extends AbstractComponent {
   }
 
   _parseFormData(formData) {
+    const emojiChecked = formData.get(`comment-emoji`);
+    const label = document.querySelector(`[for="emoji-${emojiChecked}"]`);
+    const selectedEmoji = label.querySelector(`img`).src;
 
     return {
       author: getRandomArrayElement(authorComment),
-      text: formData.get(`comment`),
-      emoji: formData.get(`comment-emoji`),
+      text: window.he.encode(formData.get(`comment`)),
+      emoji: selectedEmoji,
       date: new Date(),
     };
   }

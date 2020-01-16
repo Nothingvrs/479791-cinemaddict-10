@@ -44,7 +44,7 @@ export default class MovieController {
   }
 
   _onCtrlEnterKeyDown(evt) {
-    if (evt.keyCode === 13 && evt.keyCode === 13) {
+    if ((evt.ctrlKey) && ((evt.keyCode === 0xA) || (evt.keyCode === 0xD))) {
       this._commentsElement.onCommentAdd();
     }
   }

@@ -36,5 +36,5 @@ export const formatDate = (date) => {
 };
 
 export const formatCommentDate = (date) => {
-  return moment(date).fromNow();
+  return moment(date).format(`DD/MM/YYYY hh:mm`);
 };
