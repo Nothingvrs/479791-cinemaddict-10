@@ -29,7 +29,8 @@ export default class PopupAddToWatchlist extends AbstractSmartComponent {
   }
 
   _saveAndRerender() {
-    this._filmCard.isGoingToWatchlist = !this._filmCard.isGoingToWatchlist;
-    this.rerender();
+    this._onDataChange(this, this._filmCard, Object.assign({}, this._filmCard, {
+      isGoingToWatchlist: !this._filmCard.isGoingToWatchlist,
+    }));
   }
 }

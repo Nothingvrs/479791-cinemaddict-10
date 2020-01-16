@@ -92,6 +92,7 @@ new Date().toLocaleString(`ru`, {
 const generateFilmCard = () => {
   const datePremiere = randomDate(new Date(1900, 1, 1), new Date());
   return {
+    id: String(new Date() + Math.random()),
     title: getRandomValue(titles),
     rating: generateRandomNumber(11, 1),
     year: datePremiere.getFullYear(),

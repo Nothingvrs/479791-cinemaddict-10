@@ -19,10 +19,13 @@ export default class MovieController {
     this._popupElement = new PopupDetails(this._card);
     this._filmCardElement = new FilmCard(this._card);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    this._onDataChangeFavoriteFilter = this._onDataChangeFavoriteFilter.bind(this);
+    this._onDataChangeWatchedFilter = this._onDataChangeWatchedFilter.bind(this);
+    this._onDataChangeWatchlistFilter = this._onDataChangeWatchlistFilter.bind(this);
     this._topContainer = this._popupElement.getElement().querySelector(`.form-details__top-container`);
-    this._cardFavoriteElement = new CardFavorite(this._card);
-    this._cardWatchedElement = new CardWatched(this._card, this._topContainer);
-    this._cardAddToWatchlistElement = new CardAddToWatchlist(this._card);
+    this._cardFavoriteElement = new CardFavorite(this._card, this._onDataChangeFavoriteFilter);
+    this._cardWatchedElement = new CardWatched(this._card, this._topContainer, this._onDataChangeWatchedFilter);
+    this._cardAddToWatchlistElement = new CardAddToWatchlist(this._card, this._onDataChangeWatchlistFilter);
     this._popupFavoriteElement = new PopupFavorite(this._card, this._onDataChangeFavoriteFilter);
     this._popupAddToWatchlistElement = new PopupAddToWatchlist(this._card, this._onDataChangeWatchlistFilter);
     this._popupWatchedElement = new PopupWatched(this._card, this._topContainer, this._onDataChangeWatchedFilter);
@@ -85,19 +88,21 @@ export default class MovieController {
     }
   }
 
-  _onDataChangeFavoriteFilter(CardController, oldData, newData) {
+  _onDataChangeFavoriteFilter(cardController, oldData, newData) {
     const isSuccess = this._movieModel.updateCard(oldData.id, newData);
 
     if (isSuccess) {
-      this._popupFavoriteElement.rerender();
+      oldData.isFavorite = newData.isFavorite;
+      cardController.rerender();
     }
   }
 
-  _onDataChangeWatchedFilter(CardController, oldData, newData) {
+  _onDataChangeWatchedFilter(cardController, oldData, newData) {
     const isSuccess = this._movieModel.updateCard(oldData.id, newData);
 
     if (isSuccess) {
-      this._popupWatchedElement.rerender();
+      oldData.isWatched = newData.isWatched;
+      cardController.rerender();
     }
   }
 
@@ -105,7 +110,8 @@ export default class MovieController {
     const isSuccess = this._movieModel.updateCard(oldData.id, newData);
 
     if (isSuccess) {
-      this._popupAddToWatchlistElement.rerender();
+      oldData.isGoingToWatchlist = newData.isGoingToWatchlist;
+      cardController.rerender();
     }
   }
 }
