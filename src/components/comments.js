@@ -1,19 +1,16 @@
 import AbstractSmartComponent from './abstract-smart-component';
-import Comment from './comment';
-import {generateComments} from '../mocks/comments';
-import {render, RenderPosition} from '../utils/render';
 
 export default class Comments extends AbstractSmartComponent {
-  constructor() {
+  constructor(count) {
     super();
-    this._comments = generateComments(4);
-    this._renderComments();
+    this._count = count;
+    this._emojiAdd();
   }
 
   getTemplate() {
     return (`<div class="form-details__bottom-container">
                 <section class="film-details__comments-wrap">
-                  <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
+                  <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${this._count}</span></h3>
           
                   <ul class="film-details__comments-list">
                     
@@ -27,22 +24,22 @@ export default class Comments extends AbstractSmartComponent {
                     </label>
           
                     <div class="film-details__emoji-list">
-                      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="sleeping">
+                      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
                       <label class="film-details__emoji-label" for="emoji-smile">
                         <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
                       </label>
           
-                      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="neutral-face">
+                      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
                       <label class="film-details__emoji-label" for="emoji-sleeping">
                         <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
                       </label>
           
-                      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-gpuke" value="grinning">
+                      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-gpuke" value="gpuke">
                       <label class="film-details__emoji-label" for="emoji-gpuke">
                         <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
                       </label>
           
-                      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="grinning">
+                      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
                       <label class="film-details__emoji-label" for="emoji-angry">
                         <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
                       </label>
@@ -54,10 +51,21 @@ export default class Comments extends AbstractSmartComponent {
           </section>\`);`);
   }
 
-  _renderComments() {
-    const commentsList = this.getElement().querySelector(`.film-details__comments-list`);
-    this._comments.forEach((comment) => {
-      render(commentsList, new Comment(comment), RenderPosition.BEFOREEND);
+  remove() {
+    this.getElement().parentNode.removeChild(this.getElement());
+  }
+
+  _emojiAdd() {
+    const emojiAddContainer = this.getElement().querySelector(`.film-details__add-emoji-label`);
+    const emojiOption = this.getElement().querySelectorAll(`.film-details__emoji-item`);
+
+    emojiOption.forEach((emoji) => {
+      emoji.addEventListener(`change`, (evt) => {
+        evt.target.checked = true;
+        let label = document.querySelector(`[for="${evt.target.id}"]`);
+        emojiAddContainer.innerHTML = ``;
+        emojiAddContainer.innerHTML = label.innerHTML;
+      });
     });
   }
 }

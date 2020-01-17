@@ -1,8 +1,9 @@
 import AbstractSmartComponent from './abstract-smart-component';
 
 export default class PopupFavorite extends AbstractSmartComponent {
-  constructor(card) {
+  constructor(card, onDataChange) {
     super();
+    this._onDataChange = onDataChange;
     this._filmCard = card;
     this._subscribeOnEvent();
   }
@@ -27,7 +28,8 @@ export default class PopupFavorite extends AbstractSmartComponent {
   }
 
   _saveAndRerender() {
-    this._filmCard.isFavorite = !this._filmCard.isFavorite;
-    this.rerender();
+    this._onDataChange(this, this._filmCard, Object.assign({}, this._filmCard, {
+      isFavorite: !this._filmCard.isFavorite,
+    }));
   }
 }

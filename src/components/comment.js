@@ -22,4 +22,9 @@ export default class Comment extends AbstractSmartComponent {
                       </div>
                     </li>`);
   }
+
+  onRemoveClick(handler) {
+    this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, handler);
+  }
 }
+

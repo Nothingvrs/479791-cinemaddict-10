@@ -1,4 +1,4 @@
-import {getRandomArrayElements, getRandomValue, randomDate} from '../utils/common';
+import {getRandomArrayElement, getRandomValue, randomDate} from '../utils/common';
 
 
 const authorComment = [
@@ -24,7 +24,7 @@ const emojiComment = [
 
 export const generateComment = () => {
   return {
-    author: getRandomArrayElements(authorComment),
+    author: getRandomArrayElement(authorComment),
     text: getRandomValue(textComment),
     emoji: getRandomValue(emojiComment),
     date: randomDate(new Date(2010, 1, 1), new Date())
