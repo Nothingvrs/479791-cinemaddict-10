@@ -21,10 +21,23 @@ export default class Menu extends AbstractSmartComponent {
   }
 
   setFilterChangeHandler(handler) {
-    this.getElement().querySelectorAll(`.main-navigation__item`).forEach((filter) => {
+    const allLinks = this.getElement().querySelectorAll(`.main-navigation__item`);
+    const filters = [];
+    allLinks.forEach((link) => {
+      if (link.classList.contains(`main-navigation__item--additional`) === false) {
+        filters.push(link);
+      }
+    });
+    filters.forEach((filter) => {
       filter.addEventListener(`click`, (evt) => {
         handler(evt.target.id);
       });
+    });
+  }
+
+  setShowStatisticHandler(handler) {
+    this.getElement().querySelectorAll(`.main-navigation__item`).forEach((link) => {
+      link.addEventListener(`click`, handler);
     });
   }
 

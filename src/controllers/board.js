@@ -150,4 +150,14 @@ export default class BoardController {
       renderCards(extraFilmsBoardElement, topCommentsFilms, this._movieModel);
     }
   }
+
+  hide() {
+    this._cardList.hide();
+    this._sortComponent.hide();
+  }
+
+  show() {
+    this._cardList.show();
+    this._sortComponent.show();
+  }
 }
