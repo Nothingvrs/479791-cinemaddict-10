@@ -11,6 +11,18 @@ export default class Movies {
     this._filterChangeHandlers = [];
   }
 
+  setComments(comments) {
+    this._comments = Array.from(comments);
+  }
+
+  getComments() {
+    return this._comments;
+  }
+
+  addComment(newComment) {
+    this._comments.unshift(newComment);
+  }
+
   getCards() {
     return getTasksByFilter(this._filmCards, this._activeFilterType);
   }

@@ -110,7 +110,7 @@ export default class BoardController {
 
     this._container.innerHTML = ``;
 
-    renderCards(this._container, sortedCards);
+    renderCards(this._container, sortedCards, this._movieModel);
 
     if (sortType === SortType.DEFAULT) {
       this.renderLoadMoreButton();
