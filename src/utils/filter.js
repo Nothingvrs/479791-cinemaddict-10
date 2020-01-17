@@ -1,18 +1,18 @@
 import {FilterType} from '../const.js';
 
-export const getWatchedMovies = (cards) => {
+const getWatchedMovies = (cards) => {
   return cards.filter((card) => card.isWatched);
 };
 
-export const getWatchlistMovies = (cards) => {
+const getWatchlistMovies = (cards) => {
   return cards.filter((card) => card.isGoingToWatchlist);
 };
 
-export const getFavoriteMovies = (cards) => {
+const getFavoriteMovies = (cards) => {
   return cards.filter((card) => card.isFavorite);
 };
 
-export const getAllMovies = (cards) => {
+const getAllMovies = (cards) => {
   return cards;
 };
 
