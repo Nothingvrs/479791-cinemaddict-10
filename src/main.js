@@ -7,6 +7,7 @@ import {generateFimCards} from './mocks/film-card';
 import {render, RenderPosition} from './utils/render';
 import BoardController from "./controllers/board";
 import {generateComments} from "./mocks/comments";
+import {FilterTypeStatistic} from "./const";
 
 const showStatisticHandler = (boardControllerElement, statisticsElement) => {
   return (evt) => {
@@ -30,7 +31,7 @@ const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 
 const boardControllerElement = new BoardController(movieModel);
-const statisticsElement = new Statistics();
+const statisticsElement = new Statistics(filmCards, FilterTypeStatistic.ALL);
 
 render(siteHeaderElement, new Search(), RenderPosition.BEFOREEND);
 render(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);

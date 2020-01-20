@@ -4,6 +4,7 @@ import {
   generateRandomNumber,
   getRandomArrayElements,
   generateRandomBoolean,
+  getRandomArrayElement,
 } from '../utils/common.js';
 
 const titles = [
@@ -56,14 +57,9 @@ const descriptions = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. C
 
 const genres = [
   `Romance comedy`,
-  `Science fiction`,
   `Horror`,
   `Documentary`,
-  `Animation`,
   `Thriller`,
-  `Drama`,
-  `Comedy`,
-  `Adventure`
 ];
 
 const restrictions = new Set([0, 6, 12, 16, 18]);
@@ -89,6 +85,8 @@ new Date().toLocaleString(`ru`, {
   day: `numeric`
 });
 
+const viewingDates = [`all`, `today`, `week`, `month`, `year`];
+
 const generateFilmCard = () => {
   const datePremiere = randomDate(new Date(1900, 1, 1), new Date());
   return {
@@ -97,7 +95,7 @@ const generateFilmCard = () => {
     rating: generateRandomNumber(11, 1),
     year: datePremiere.getFullYear(),
     duration: generateRandomNumber(360, 60),
-    genre: genres.slice(0, generateRandomNumber(9, 1)).join(`, `),
+    genre: genres.slice(0, generateRandomNumber(9, 1)),
     description: getRandomArrayElements(descriptions, generateRandomNumber(3)).join(`. `),
     comments: generateRandomNumber(200),
     isFavorite: generateRandomBoolean(),
@@ -110,6 +108,7 @@ const generateFilmCard = () => {
     restrictions: getRandomValue(Array.from(restrictions)),
     premiere: datePremiere,
     country: getRandomValue(Array.from(countries)),
+    viewingDate: getRandomArrayElement(viewingDates),
   };
 };
 
