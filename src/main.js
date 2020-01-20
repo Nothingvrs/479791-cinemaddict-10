@@ -14,6 +14,8 @@ const showStatisticHandler = (boardControllerElement, statisticsElement) => {
     if (evt.target.className.includes(`main-navigation__item--additional`)) {
       boardControllerElement.hide();
       statisticsElement.show();
+      statisticsElement.renderStatisticsTextList();
+      statisticsElement.renderChart();
     } else {
       boardControllerElement.show();
       statisticsElement.hide();
@@ -31,7 +33,7 @@ const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 
 const boardControllerElement = new BoardController(movieModel);
-const statisticsElement = new Statistics(filmCards, FilterTypeStatistic.ALL);
+const statisticsElement = new Statistics(movieModel, FilterTypeStatistic.ALL);
 
 render(siteHeaderElement, new Search(), RenderPosition.BEFOREEND);
 render(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);

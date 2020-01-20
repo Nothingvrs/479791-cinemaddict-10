@@ -3,8 +3,10 @@ import {
   getFilmsByFilterStatistic
 } from '../utils/filter.js';
 import Chart from "chart.js";
+import {render, RenderPosition} from '../utils/render';
+import StatisticsTextList from "./statistics-text-list";
 
-const genreCounter = (cards, prop) => {
+export const genreCounter = (cards, prop) => {
   let genreCount = 0;
   cards.forEach((card) => {
     card.genre.forEach((genre) => {
@@ -17,20 +19,33 @@ const genreCounter = (cards, prop) => {
 };
 
 export default class Statistics extends AbstractComponent {
-  constructor(cards, activeRadioButton) {
+  constructor(movieModel, activeRadioButton) {
     super();
-    this._cards = cards;
+    this._movieModel = movieModel;
+    this._cards = null;
     this._activeStatisticFilterType = null;
     this.setFilterType(activeRadioButton);
-    this._watchedFilms = getFilmsByFilterStatistic(this._cards, this._activeStatisticFilterType);
+    this._watchedFilms = null;
     this.show = this.show.bind(this);
     this.hide = this.hide.bind(this);
     this.hide();
-    this.renderChart();
     this.setActiveFilter();
   }
 
+  renderStatisticsTextList() {
+    this._cards = this._movieModel.getCardsAll();
+    this._watchedFilms = getFilmsByFilterStatistic(this._cards, this._activeStatisticFilterType);
+    const statisticForm = this.getElement().querySelector(`form`);
+    const statisticTextListElement = new StatisticsTextList(this._watchedFilms);
+    if (this.getElement().contains(statisticTextListElement.getElement())) {
+      statisticTextListElement.removeStatisticList();
+    }
+    render(statisticForm, statisticTextListElement, RenderPosition.AFTERNODE);
+  }
+
   renderChart() {
+    this._cards = this._movieModel.getCardsAll();
+    this._watchedFilms = getFilmsByFilterStatistic(this._cards, this._activeStatisticFilterType);
     if (this._watchedFilms.length !== 0) {
       const ctx = this.getElement().querySelector(`.statistic__chart`).getContext(`2d`);
       return new Chart(ctx, {
@@ -46,7 +61,7 @@ export default class Statistics extends AbstractComponent {
               genreCounter(this._watchedFilms, `Drama`),
               genreCounter(this._watchedFilms, `Comedy`)],
             backgroundColor: [
-              `rgba(255, 99, 132, 0.2)`,
+              `rgba(255, 206, 86, 0.2)`,
               `rgba(255, 206, 86, 0.2)`,
               `rgba(255, 206, 86, 0.2)`,
               `rgba(255, 206, 86, 0.2)`,
@@ -54,7 +69,7 @@ export default class Statistics extends AbstractComponent {
               `rgba(255, 206, 86, 0.2)`,
             ],
             borderColor: [
-              `rgba(255, 99, 132, 1)`,
+              `rgba(255, 206, 86, 1)`,
               `rgba(255, 206, 86, 1)`,
               `rgba(255, 206, 86, 1)`,
               `rgba(255, 206, 86, 1)`,
@@ -65,6 +80,12 @@ export default class Statistics extends AbstractComponent {
           }]
         },
         options: {
+          legend: {
+            display: false,
+            labels: {
+              display: false
+            }
+          },
           scales: {
             yAxes: [{
               ticks: {
@@ -91,34 +112,6 @@ export default class Statistics extends AbstractComponent {
   }
 
   getTemplate() {
-    const totalFilms = this._watchedFilms.length;
-    let amountDuration = 0;
-    this._watchedFilms.forEach((card) => {
-      amountDuration += card.duration;
-    });
-
-    const fractionalPart = Math.trunc(amountDuration / 60);
-
-    const amountTime = {
-      hours: fractionalPart,
-      minutes: amountDuration - (fractionalPart * 60),
-    };
-
-    const getMostPopularGenre = () => {
-      const genres = {
-        RomanceComedy: genreCounter(this._watchedFilms, `Romance comedy`),
-        Horror: genreCounter(this._watchedFilms, `Horror`),
-        Documentary: genreCounter(this._watchedFilms, `Documentary`),
-        Thriller: genreCounter(this._watchedFilms, `Thriller`),
-        Drama: genreCounter(this._watchedFilms, `Drama`),
-        Comedy: genreCounter(this._watchedFilms, `Comedy`)
-      };
-      const sortedGenres = Object.entries(genres).sort((a, b) => b[1] - a[1]);
-      return sortedGenres[0];
-    };
-
-    const mostPopularGenre = getMostPopularGenre();
-
     return `<section class="statistic visually-hidden">
     <p class="statistic__rank">
       Your rank
@@ -138,20 +131,7 @@ export default class Statistics extends AbstractComponent {
       <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year">
       <label for="statistic-year" class="statistic__filters-label">Year</label>
     </form>
-    <ul class="statistic__text-list">
-      <li class="statistic__text-item">
-        <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text statistic__item-text_watched-movies">${totalFilms} <span class="statistic__item-description">movies</span></p>
-      </li>
-      <li class="statistic__text-item">
-        <h4 class="statistic__item-title">Total duration</h4>
-        <p class="statistic__item-text">${amountTime.hours} <span class="statistic__item-description">h</span> ${amountTime.minutes} <span class="statistic__item-description">m</span></p>
-      </li>
-      <li class="statistic__text-item">
-        <h4 class="statistic__item-title">Top genre</h4>
-        <p class="statistic__item-text">${this._watchedFilms.length === 0 ? `—` : mostPopularGenre[0]}</p>
-      </li>
-    </ul>
+    
     <div class="statistic__chart-wrap">
       <canvas class="statistic__chart" width="1000"></canvas>
     </div>
