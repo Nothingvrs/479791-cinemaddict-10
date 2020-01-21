@@ -36,7 +36,7 @@ const boardControllerElement = new BoardController(movieModel);
 const statisticsElement = new Statistics(movieModel, FilterTypeStatistic.ALL);
 
 render(siteHeaderElement, new Search(), RenderPosition.BEFOREEND);
-render(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
+render(siteHeaderElement, new Profile(movieModel), RenderPosition.BEFOREEND);
 const filterController = new FilterController(siteMainElement, movieModel, showStatisticHandler(boardControllerElement, statisticsElement));
 filterController.render();
 

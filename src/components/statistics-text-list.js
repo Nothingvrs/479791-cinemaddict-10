@@ -53,8 +53,4 @@ export default class StatisticsTextList extends AbstractComponent {
       </li>
     </ul>`;
   }
-
-  removeStatisticList() {
-    this.getElement().parentNode.removeChild(this.getElement());
-  }
 }

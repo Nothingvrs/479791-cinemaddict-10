@@ -7,6 +7,8 @@ export default class Menu extends AbstractSmartComponent {
     this._historyCount = 0;
     this._favoritesCount = 0;
     this._filters = filters;
+    this._links = this.getElement().querySelectorAll(`.main-navigation__item`);
+    this._setActiveLink();
   }
 
   getTemplate() {
@@ -36,8 +38,21 @@ export default class Menu extends AbstractSmartComponent {
   }
 
   setShowStatisticHandler(handler) {
-    this.getElement().querySelectorAll(`.main-navigation__item`).forEach((link) => {
+    this._links.forEach((link) => {
       link.addEventListener(`click`, handler);
+    });
+  }
+
+  _setActiveLink() {
+    this._links.forEach((link) => {
+      link.addEventListener(`click`, (evt) => {
+        this._links.forEach((filter) => {
+          if (filter.classList.contains(`main-navigation__item--active`)) {
+            filter.classList.remove(`main-navigation__item--active`);
+          }
+          evt.target.classList.add(`main-navigation__item--active`);
+        });
+      });
     });
   }
 

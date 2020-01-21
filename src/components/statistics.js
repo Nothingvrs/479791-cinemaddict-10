@@ -35,19 +35,25 @@ export default class Statistics extends AbstractComponent {
   renderStatisticsTextList() {
     this._cards = this._movieModel.getCardsAll();
     this._watchedFilms = getFilmsByFilterStatistic(this._cards, this._activeStatisticFilterType);
-    const statisticForm = this.getElement().querySelector(`form`);
     const statisticTextListElement = new StatisticsTextList(this._watchedFilms);
-    if (this.getElement().contains(statisticTextListElement.getElement())) {
-      statisticTextListElement.removeStatisticList();
+    const statisticForm = this.getElement().querySelector(`form`);
+    const statisticTextList = this.getElement().querySelector(`.statistic__text-list`);
+    if (statisticTextList !== null) {
+      statisticTextList.parentNode.removeChild(statisticTextList);
     }
     render(statisticForm, statisticTextListElement, RenderPosition.AFTERNODE);
   }
 
   renderChart() {
+    const chartWrap = this.getElement().querySelector(`.statistic__chart-wrap`);
+    chartWrap.innerHTML = ``;
+    chartWrap.innerHTML = `<canvas class="statistic__chart" width="1000"></canvas>`;
     this._cards = this._movieModel.getCardsAll();
     this._watchedFilms = getFilmsByFilterStatistic(this._cards, this._activeStatisticFilterType);
     if (this._watchedFilms.length !== 0) {
-      const ctx = this.getElement().querySelector(`.statistic__chart`).getContext(`2d`);
+      const canvas = this.getElement().querySelector(`.statistic__chart`);
+      const ctx = canvas.getContext(`2d`);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       return new Chart(ctx, {
         type: `bar`,
         data: {
@@ -60,22 +66,8 @@ export default class Statistics extends AbstractComponent {
               genreCounter(this._watchedFilms, `Thriller`),
               genreCounter(this._watchedFilms, `Drama`),
               genreCounter(this._watchedFilms, `Comedy`)],
-            backgroundColor: [
-              `rgba(255, 206, 86, 0.2)`,
-              `rgba(255, 206, 86, 0.2)`,
-              `rgba(255, 206, 86, 0.2)`,
-              `rgba(255, 206, 86, 0.2)`,
-              `rgba(255, 206, 86, 0.2)`,
-              `rgba(255, 206, 86, 0.2)`,
-            ],
-            borderColor: [
-              `rgba(255, 206, 86, 1)`,
-              `rgba(255, 206, 86, 1)`,
-              `rgba(255, 206, 86, 1)`,
-              `rgba(255, 206, 86, 1)`,
-              `rgba(255, 206, 86, 1)`,
-              `rgba(255, 206, 86, 1)`,
-            ],
+            backgroundColor: `rgba(255, 206, 86, 0.2)`,
+            borderColor: `rgba(255, 206, 86, 1)`,
             borderWidth: 2,
           }]
         },
@@ -133,7 +125,7 @@ export default class Statistics extends AbstractComponent {
     </form>
     
     <div class="statistic__chart-wrap">
-      <canvas class="statistic__chart" width="1000"></canvas>
+     <canvas class="statistic__chart" width="1000"></canvas>
     </div>
   </section>`;
   }
