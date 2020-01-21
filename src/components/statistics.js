@@ -4,7 +4,7 @@ import {
 } from '../utils/filter.js';
 import Chart from "chart.js";
 import {render, RenderPosition} from '../utils/render';
-import StatisticsTextList from "./statistics-text-list";
+import StatisticsTextList from './statistics-text-list';
 
 export const genreCounter = (cards, prop) => {
   let genreCount = 0;
@@ -96,7 +96,7 @@ export default class Statistics extends AbstractComponent {
   }
 
   setActiveFilter() {
-    [...this.getElement().querySelectorAll(`.statistic__filters-input`)].forEach((button) => {
+    this.getElement().querySelectorAll(`.statistic__filters-input`).forEach((button) => {
       if (button.value === this._activeStatisticFilterType) {
         button.checked = `true`;
       }

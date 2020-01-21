@@ -126,8 +126,9 @@ export default class BoardController {
   }
 
   renderTopRatingFilms() {
-    const topRatingFilms = this._movieModel.getCards()
-      .sort((film1, film2) => (film2.rating - film1.rating))
+    const cards = this._movieModel.getCardsAll().slice();
+    const topRatingFilms = cards.
+    sort((film1, film2) => (film2.rating - film1.rating))
       .filter((film) => film.rating !== 0)
       .slice(0, FILM_CARD_EXTRA_AMOUNT);
     if (topRatingFilms.length > 0) {
@@ -139,7 +140,8 @@ export default class BoardController {
   }
 
   renderTopCommentsFilms() {
-    const topCommentsFilms = this._movieModel.getCards()
+    const cards = this._movieModel.getCardsAll().slice();
+    const topCommentsFilms = cards
       .sort((film1, film2) => (film2.comments - film1.comments))
       .filter((film) => film.comments !== 0)
       .slice(0, FILM_CARD_EXTRA_AMOUNT);
