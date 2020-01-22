@@ -32,7 +32,7 @@ export default class PopupDetails extends AbstractSmartComponent {
                       </div>
           
                       <div class="film-details__rating">
-                        <p class="film-details__total-rating">${this._filmCard.rating}</p>
+                        <p class="film-details__total-rating">${this._filmCard.totalRating}</p>
                       </div>
                     </div>
           

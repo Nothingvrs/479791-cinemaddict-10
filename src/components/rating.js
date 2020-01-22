@@ -6,6 +6,9 @@ export default class Rating extends AbstractComponent {
     super();
     this._container = container;
     this._filmCard = card;
+    this._undoButton = this.getElement().querySelector(`.film-details__watched-reset`);
+    this._ratingButtons = this.getElement().querySelectorAll(`.film-details__user-rating-input`);
+    this._removeRating = this._removeRating.bind(this);
   }
 
   getTemplate() {
@@ -66,7 +69,35 @@ export default class Rating extends AbstractComponent {
     }
 
     if (isWatched) {
+      this._onDataRating();
       render(this._container, this, RenderPosition.AFTERNODE);
+      this._onSetRating();
+      this._undoButton.addEventListener(`click`, this._removeRating);
+    } else {
+      this._removeRating();
     }
+  }
+
+  _onDataRating() {
+    this._ratingButtons.forEach((button) => {
+      if (this._filmCard.personalRating === Number(button.value)) {
+        button.checked = true;
+      }
+    });
+  }
+
+  _removeRating() {
+    this._ratingButtons.forEach((button) => {
+      button.checked = false;
+    });
+    this._filmCard.personalRating = null;
+  }
+
+  _onSetRating() {
+    this._ratingButtons.forEach((button) => {
+      button.addEventListener(`click`, () => {
+        this._filmCard.personalRating = button.value;
+      });
+    });
   }
 }

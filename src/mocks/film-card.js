@@ -92,7 +92,8 @@ const generateFilmCard = () => {
   return {
     id: String(new Date() + Math.random()),
     title: getRandomValue(titles),
-    rating: generateRandomNumber(11, 1),
+    totalRating: generateRandomNumber(10, 1),
+    personalRating: generateRandomNumber(10, 1),
     year: datePremiere.getFullYear(),
     duration: generateRandomNumber(360, 60),
     genre: genres.slice(0, generateRandomNumber(9, 1)),
