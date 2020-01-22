@@ -46,12 +46,9 @@ export default class Menu extends AbstractSmartComponent {
   _setActiveLink() {
     this._links.forEach((link) => {
       link.addEventListener(`click`, (evt) => {
-        this._links.forEach((filter) => {
-          if (filter.classList.contains(`main-navigation__item--active`)) {
-            filter.classList.remove(`main-navigation__item--active`);
-          }
-          evt.target.classList.add(`main-navigation__item--active`);
-        });
+        const activeFilter = this.getElement().querySelector(`.main-navigation__item--active`);
+        activeFilter.classList.remove(`main-navigation__item--active`);
+        evt.target.classList.add(`main-navigation__item--active`);
       });
     });
   }

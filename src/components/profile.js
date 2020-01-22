@@ -1,6 +1,6 @@
-import AbstractComponent from './abstract-component';
+import AbstractSmartComponent from './abstract-smart-component';
 
-export default class Profile extends AbstractComponent {
+export default class Profile extends AbstractSmartComponent {
   constructor(movieModel) {
     super();
     this._movieModel = movieModel;

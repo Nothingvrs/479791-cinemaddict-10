@@ -135,6 +135,7 @@ export default class BoardController {
       render(this._board, new ExtraFilms(`Top rated`), RenderPosition.BEFOREEND);
       const extraFilmsContainerElement = document.querySelector(`.films-list--extra`);
       const extraFilmsBoardElement = extraFilmsContainerElement.querySelector(`.films-list__container`);
+      extraFilmsBoardElement.innerHTML = ``;
       renderCards(extraFilmsBoardElement, topRatingFilms, this._movieModel);
     }
   }
@@ -149,6 +150,7 @@ export default class BoardController {
       render(this._board, new ExtraFilms(`MostCommented`), RenderPosition.BEFOREEND);
       const extraFilmsContainerElement = document.querySelectorAll(`.films-list--extra`);
       const extraFilmsBoardElement = extraFilmsContainerElement[1].querySelector(`.films-list__container`);
+      extraFilmsBoardElement.innerHTML = ``;
       renderCards(extraFilmsBoardElement, topCommentsFilms, this._movieModel);
     }
   }

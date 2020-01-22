@@ -9,16 +9,22 @@ import BoardController from "./controllers/board";
 import {generateComments} from "./mocks/comments";
 import {FilterTypeStatistic} from "./const";
 
+let isStatsViewing = false;
+
 const showStatisticHandler = (boardControllerElement, statisticsElement) => {
   return (evt) => {
     if (evt.target.className.includes(`main-navigation__item--additional`)) {
-      boardControllerElement.hide();
-      statisticsElement.show();
-      statisticsElement.renderStatisticsTextList();
-      statisticsElement.renderChart();
+      if (!isStatsViewing) {
+        isStatsViewing = true;
+        boardControllerElement.hide();
+        statisticsElement.show();
+        statisticsElement.renderStatisticsTextList();
+        statisticsElement.updateChartData();
+      }
     } else {
       boardControllerElement.show();
       statisticsElement.hide();
+      isStatsViewing = false;
     }
   };
 };
@@ -32,11 +38,13 @@ movieModel.setComments(comments);
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 
-const boardControllerElement = new BoardController(movieModel);
-const statisticsElement = new Statistics(movieModel, FilterTypeStatistic.ALL);
-
 render(siteHeaderElement, new Search(), RenderPosition.BEFOREEND);
-render(siteHeaderElement, new Profile(movieModel), RenderPosition.BEFOREEND);
+const profileElement = new Profile(movieModel);
+render(siteHeaderElement, profileElement, RenderPosition.BEFOREEND);
+
+const boardControllerElement = new BoardController(movieModel);
+
+const statisticsElement = new Statistics(movieModel, FilterTypeStatistic.ALL);
 const filterController = new FilterController(siteMainElement, movieModel, showStatisticHandler(boardControllerElement, statisticsElement));
 filterController.render();
 

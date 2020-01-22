@@ -63,7 +63,6 @@ export default class Comments extends AbstractSmartComponent {
       emoji.addEventListener(`change`, (evt) => {
         evt.target.checked = true;
         let label = document.querySelector(`[for="${evt.target.id}"]`);
-        emojiAddContainer.innerHTML = ``;
         emojiAddContainer.innerHTML = label.innerHTML;
       });
     });

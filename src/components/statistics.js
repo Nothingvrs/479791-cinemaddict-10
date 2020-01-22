@@ -26,10 +26,12 @@ export default class Statistics extends AbstractComponent {
     this._activeStatisticFilterType = null;
     this.setFilterType(activeRadioButton);
     this._watchedFilms = null;
+    this._chart = null;
     this.show = this.show.bind(this);
     this.hide = this.hide.bind(this);
     this.hide();
     this.setActiveFilter();
+    this.renderChart();
   }
 
   renderStatisticsTextList() {
@@ -38,28 +40,23 @@ export default class Statistics extends AbstractComponent {
     const statisticTextListElement = new StatisticsTextList(this._watchedFilms);
     const statisticForm = this.getElement().querySelector(`form`);
     const statisticTextList = this.getElement().querySelector(`.statistic__text-list`);
-    if (statisticTextList !== null) {
+    if (statisticTextList) {
       statisticTextList.parentNode.removeChild(statisticTextList);
     }
     render(statisticForm, statisticTextListElement, RenderPosition.AFTERNODE);
   }
 
   renderChart() {
-    const chartWrap = this.getElement().querySelector(`.statistic__chart-wrap`);
-    chartWrap.innerHTML = ``;
-    chartWrap.innerHTML = `<canvas class="statistic__chart" width="1000"></canvas>`;
     this._cards = this._movieModel.getCardsAll();
     this._watchedFilms = getFilmsByFilterStatistic(this._cards, this._activeStatisticFilterType);
     if (this._watchedFilms.length !== 0) {
       const canvas = this.getElement().querySelector(`.statistic__chart`);
       const ctx = canvas.getContext(`2d`);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      return new Chart(ctx, {
+      this._chart = new Chart(ctx, {
         type: `bar`,
         data: {
           labels: [`Romance comedy`, `Horror`, `Documentary`, `Thriller`, `Drama`, `Comedy`],
           datasets: [{
-            label: `Favorite Genre`,
             data: [genreCounter(this._watchedFilms, `Romance comedy`),
               genreCounter(this._watchedFilms, `Horror`),
               genreCounter(this._watchedFilms, `Documentary`),
@@ -87,8 +84,27 @@ export default class Statistics extends AbstractComponent {
           }
         }
       });
+      return this._chart;
     }
     return 0;
+  }
+
+  updateChartData() {
+    this._chart.data.datasets.forEach((dataset) => {
+      dataset.data.pop();
+    });
+    this._chart.data.datasets = [{
+      data: [genreCounter(this._watchedFilms, `Romance comedy`),
+        genreCounter(this._watchedFilms, `Horror`),
+        genreCounter(this._watchedFilms, `Documentary`),
+        genreCounter(this._watchedFilms, `Thriller`),
+        genreCounter(this._watchedFilms, `Drama`),
+        genreCounter(this._watchedFilms, `Comedy`)],
+      backgroundColor: `rgba(255, 206, 86, 0.2)`,
+      borderColor: `rgba(255, 206, 86, 1)`,
+      borderWidth: 2,
+    }];
+    this._chart.update();
   }
 
   setFilterType(filterType) {
@@ -96,11 +112,7 @@ export default class Statistics extends AbstractComponent {
   }
 
   setActiveFilter() {
-    this.getElement().querySelectorAll(`.statistic__filters-input`).forEach((button) => {
-      if (button.value === this._activeStatisticFilterType) {
-        button.checked = `true`;
-      }
-    });
+    this.getElement().querySelector(`.statistic__filters-input[value=${this._activeStatisticFilterType}]`).checked = true;
   }
 
   getTemplate() {
