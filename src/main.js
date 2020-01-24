@@ -13,14 +13,12 @@ let isStatsViewing = false;
 
 const showStatisticHandler = (boardControllerElement, statisticsElement) => {
   return (evt) => {
-    if (evt.target.className.includes(`main-navigation__item--additional`)) {
-      if (!isStatsViewing) {
-        isStatsViewing = true;
-        boardControllerElement.hide();
-        statisticsElement.show();
-        statisticsElement.renderStatisticsTextList();
-        statisticsElement.updateChartData();
-      }
+    if (evt.target.className.includes(`main-navigation__item--additional`) && !isStatsViewing) {
+      isStatsViewing = true;
+      boardControllerElement.hide();
+      statisticsElement.show();
+      statisticsElement.renderStatisticsTextList();
+      statisticsElement.updateChartData();
     } else {
       boardControllerElement.show();
       statisticsElement.hide();
