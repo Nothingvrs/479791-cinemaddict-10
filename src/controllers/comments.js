@@ -2,7 +2,6 @@ import AbstractComponent from '../components/abstract-component';
 import Comment from '../components/comment';
 import Comments from '../components/comments';
 import {render, RenderPosition} from '../utils/render';
-import {generateComments} from '../mocks/comments';
 import {getRandomArrayElement} from "../utils/common";
 import he from 'he';
 
@@ -14,10 +13,11 @@ const authorComment = [
 ];
 
 export default class CommentsController extends AbstractComponent {
-  constructor(form) {
+  constructor(form, movieModel) {
     super();
     this._form = form;
-    this._commentsData = generateComments(4);
+    this._movieModel = movieModel;
+    this._commentsData = this._movieModel.getComments();
     this._commentsList = null;
     this._getData = this._getData.bind(this);
   }
@@ -60,7 +60,7 @@ export default class CommentsController extends AbstractComponent {
   }
 
   onCommentAdd() {
-    this._commentsData.unshift(this._getData());
+    this._movieModel.addComment(this._getData());
     this._comments.remove();
     this._renderComments();
   }

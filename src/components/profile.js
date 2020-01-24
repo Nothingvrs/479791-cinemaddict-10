@@ -1,16 +1,18 @@
-import {generateRandomNumber} from '../utils/common.js';
-import AbstractComponent from './abstract-component';
+import AbstractSmartComponent from './abstract-smart-component';
 
-export default class Profile extends AbstractComponent {
-  constructor() {
+export default class Profile extends AbstractSmartComponent {
+  constructor(movieModel) {
     super();
-    this._filmsAmount = generateRandomNumber(30, 1);
+    this._movieModel = movieModel;
+    this._cards = this._movieModel.getCardsAll();
+    this._filmsWatched = this._cards.filter((card) => {
+      return card.isWatched === true;
+    });
     this._noviceCount = 10;
     this._fanCount = 20;
   }
 
   getTemplate() {
-    generateRandomNumber(30, 1);
     return (`<section class="header__profile profile">
                 <p class="profile__rating">${this.generateRating()}</p>
                 <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
@@ -19,11 +21,11 @@ export default class Profile extends AbstractComponent {
 
   generateRating() {
     let rating;
-    if (this._filmsAmount <= this._noviceCount) {
+    if (this._filmsWatched.length <= this._noviceCount) {
       rating = `novice`;
-    } else if (this._filmsAmount > this._noviceCount && this._filmsAmount <= this._fanCount) {
+    } else if (this._filmsWatched.length > this._noviceCount && this._filmsWatched.length <= this._fanCount) {
       rating = `fan`;
-    } else if (this._filmsAmount > this._fanCount) {
+    } else if (this._filmsWatched.length > this._fanCount) {
       rating = `movie buff`;
     } return rating;
   }

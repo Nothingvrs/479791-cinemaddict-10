@@ -4,9 +4,10 @@ import {getTasksByFilter} from '../utils/filter.js';
 import Menu from "../components/menu";
 
 export default class FilterController {
-  constructor(container, movieModel) {
+  constructor(container, movieModel, showStatisticHandler) {
     this._container = container;
     this._movieModel = movieModel;
+    this._showStatisticHandler = showStatisticHandler;
 
     this._activeFilterType = FilterType.ALL;
     this._filterComponent = null;
@@ -29,6 +30,7 @@ export default class FilterController {
 
     this._filterComponent = new Menu(filters);
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
+    this._filterComponent.setShowStatisticHandler(this._showStatisticHandler);
 
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);

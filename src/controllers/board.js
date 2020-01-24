@@ -110,7 +110,7 @@ export default class BoardController {
 
     this._container.innerHTML = ``;
 
-    renderCards(this._container, sortedCards);
+    renderCards(this._container, sortedCards, this._movieModel);
 
     if (sortType === SortType.DEFAULT) {
       this.renderLoadMoreButton();
@@ -126,20 +126,23 @@ export default class BoardController {
   }
 
   renderTopRatingFilms() {
-    const topRatingFilms = this._movieModel.getCards()
-      .sort((film1, film2) => (film2.rating - film1.rating))
+    const cards = this._movieModel.getCardsAll().slice();
+    const topRatingFilms = cards.
+    sort((film1, film2) => (film2.rating - film1.rating))
       .filter((film) => film.rating !== 0)
       .slice(0, FILM_CARD_EXTRA_AMOUNT);
     if (topRatingFilms.length > 0) {
       render(this._board, new ExtraFilms(`Top rated`), RenderPosition.BEFOREEND);
       const extraFilmsContainerElement = document.querySelector(`.films-list--extra`);
       const extraFilmsBoardElement = extraFilmsContainerElement.querySelector(`.films-list__container`);
-      renderCards(extraFilmsBoardElement, topRatingFilms);
+      extraFilmsBoardElement.innerHTML = ``;
+      renderCards(extraFilmsBoardElement, topRatingFilms, this._movieModel);
     }
   }
 
   renderTopCommentsFilms() {
-    const topCommentsFilms = this._movieModel.getCards()
+    const cards = this._movieModel.getCardsAll().slice();
+    const topCommentsFilms = cards
       .sort((film1, film2) => (film2.comments - film1.comments))
       .filter((film) => film.comments !== 0)
       .slice(0, FILM_CARD_EXTRA_AMOUNT);
@@ -147,7 +150,18 @@ export default class BoardController {
       render(this._board, new ExtraFilms(`MostCommented`), RenderPosition.BEFOREEND);
       const extraFilmsContainerElement = document.querySelectorAll(`.films-list--extra`);
       const extraFilmsBoardElement = extraFilmsContainerElement[1].querySelector(`.films-list__container`);
-      renderCards(extraFilmsBoardElement, topCommentsFilms);
+      extraFilmsBoardElement.innerHTML = ``;
+      renderCards(extraFilmsBoardElement, topCommentsFilms, this._movieModel);
     }
+  }
+
+  hide() {
+    this._cardList.hide();
+    this._sortComponent.hide();
+  }
+
+  show() {
+    this._cardList.show();
+    this._sortComponent.show();
   }
 }

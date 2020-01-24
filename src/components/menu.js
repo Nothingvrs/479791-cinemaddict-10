@@ -7,6 +7,8 @@ export default class Menu extends AbstractSmartComponent {
     this._historyCount = 0;
     this._favoritesCount = 0;
     this._filters = filters;
+    this._links = this.getElement().querySelectorAll(`.main-navigation__item`);
+    this._setActiveLink();
   }
 
   getTemplate() {
@@ -21,9 +23,32 @@ export default class Menu extends AbstractSmartComponent {
   }
 
   setFilterChangeHandler(handler) {
-    this.getElement().querySelectorAll(`.main-navigation__item`).forEach((filter) => {
+    const allLinks = this.getElement().querySelectorAll(`.main-navigation__item`);
+    const filters = [];
+    allLinks.forEach((link) => {
+      if (link.classList.contains(`main-navigation__item--additional`) === false) {
+        filters.push(link);
+      }
+    });
+    filters.forEach((filter) => {
       filter.addEventListener(`click`, (evt) => {
         handler(evt.target.id);
+      });
+    });
+  }
+
+  setShowStatisticHandler(handler) {
+    this._links.forEach((link) => {
+      link.addEventListener(`click`, handler);
+    });
+  }
+
+  _setActiveLink() {
+    this._links.forEach((link) => {
+      link.addEventListener(`click`, (evt) => {
+        const activeFilter = this.getElement().querySelector(`.main-navigation__item--active`);
+        activeFilter.classList.remove(`main-navigation__item--active`);
+        evt.target.classList.add(`main-navigation__item--active`);
       });
     });
   }
