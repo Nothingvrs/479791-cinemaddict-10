@@ -5,22 +5,9 @@ import {FilterType} from '../const.js';
 export default class Movies {
   constructor() {
     this._filmCards = [];
-    this._comments = [];
     this._activeFilterType = FilterType.ALL;
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
-  }
-
-  setComments(comments) {
-    this._comments = Array.from(comments);
-  }
-
-  getComments() {
-    return this._comments;
-  }
-
-  addComment(newComment) {
-    this._comments.unshift(newComment);
   }
 
   getCards() {
@@ -33,6 +20,7 @@ export default class Movies {
 
   setCards(cards) {
     this._filmCards = Array.from(cards);
+    this._dataChangeHandlers.forEach((handler) => handler());
   }
 
   setFilter(filterType) {

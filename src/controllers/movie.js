@@ -12,7 +12,8 @@ import CommentsController from './comments';
 const siteBodyElement = document.querySelector(`body`);
 
 export default class MovieController {
-  constructor(container, card, movieModel) {
+  constructor(container, card, movieModel, api) {
+    this._api = api;
     this._card = card;
     this._movieModel = movieModel;
     this._container = container;
@@ -31,7 +32,7 @@ export default class MovieController {
     this._popupFavoriteElement = new PopupFavorite(this._card, this._onDataChangeFavoriteFilter);
     this._popupAddToWatchlistElement = new PopupAddToWatchlist(this._card, this._onDataChangeWatchlistFilter);
     this._popupWatchedElement = new PopupWatched(this._card, this._topContainer, this._onDataChangeWatchedFilter);
-    this._commentsElement = new CommentsController(this._PopupInnerContainer, this._movieModel);
+    this._commentsElement = new CommentsController(this._card, this._PopupInnerContainer, this._card.id, this._api);
   }
 
   _onEscKeyDown(evt) {

@@ -13,11 +13,12 @@ const authorComment = [
 ];
 
 export default class CommentsController extends AbstractComponent {
-  constructor(form, movieModel) {
+  constructor(card, form, id, api) {
     super();
+    this._api = api;
     this._form = form;
-    this._movieModel = movieModel;
-    this._commentsData = this._movieModel.getComments();
+    this._card = card;
+    this._commentsData = this._card.comments;
     this._commentsList = null;
     this._getData = this._getData.bind(this);
   }
@@ -41,9 +42,7 @@ export default class CommentsController extends AbstractComponent {
   }
 
   _getData() {
-    const formData = new FormData(this._form);
-
-    return this._parseFormData(formData);
+    return new FormData(this._form);
   }
 
   _parseFormData(formData) {
@@ -60,7 +59,6 @@ export default class CommentsController extends AbstractComponent {
   }
 
   onCommentAdd() {
-    this._movieModel.addComment(this._getData());
     this._comments.remove();
     this._renderComments();
   }

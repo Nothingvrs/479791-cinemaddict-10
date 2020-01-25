@@ -12,9 +12,9 @@ const FILM_CARD_AMOUNT_ON_START = 5;
 
 const siteMainElement = document.querySelector(`.main`);
 
-const renderCards = (cardListElement, cards, movieModel) => {
+const renderCards = (cardListElement, cards, movieModel, api) => {
   return cards.map((card) => {
-    const movieController = new MovieController(cardListElement, card, movieModel);
+    const movieController = new MovieController(cardListElement, card, movieModel, api);
     movieController.render();
 
     return movieController;
@@ -22,7 +22,8 @@ const renderCards = (cardListElement, cards, movieModel) => {
 };
 
 export default class BoardController {
-  constructor(movieModel) {
+  constructor(movieModel, api) {
+    this._api = api;
     this._container = null;
     this._movieModel = movieModel;
     this._board = null;
@@ -64,7 +65,7 @@ export default class BoardController {
   }
 
   _renderCards(cards) {
-    const newCards = renderCards(this._container, cards, this._movieModel);
+    const newCards = renderCards(this._container, cards, this._movieModel, this._api);
     this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
     this._showingCardsCount = this._showedCardsControllers.length;
   }
@@ -110,7 +111,7 @@ export default class BoardController {
 
     this._container.innerHTML = ``;
 
-    renderCards(this._container, sortedCards, this._movieModel);
+    renderCards(this._container, sortedCards, this._movieModel, this._api);
 
     if (sortType === SortType.DEFAULT) {
       this.renderLoadMoreButton();
@@ -136,7 +137,7 @@ export default class BoardController {
       const extraFilmsContainerElement = document.querySelector(`.films-list--extra`);
       const extraFilmsBoardElement = extraFilmsContainerElement.querySelector(`.films-list__container`);
       extraFilmsBoardElement.innerHTML = ``;
-      renderCards(extraFilmsBoardElement, topRatingFilms, this._movieModel);
+      renderCards(extraFilmsBoardElement, topRatingFilms, this._movieModel, this._api);
     }
   }
 
@@ -151,7 +152,7 @@ export default class BoardController {
       const extraFilmsContainerElement = document.querySelectorAll(`.films-list--extra`);
       const extraFilmsBoardElement = extraFilmsContainerElement[1].querySelector(`.films-list__container`);
       extraFilmsBoardElement.innerHTML = ``;
-      renderCards(extraFilmsBoardElement, topCommentsFilms, this._movieModel);
+      renderCards(extraFilmsBoardElement, topCommentsFilms, this._movieModel, this._api);
     }
   }
 

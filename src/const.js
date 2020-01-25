@@ -12,3 +12,10 @@ export const FilterTypeStatistic = {
   MONTH: `month`,
   YEAR: `year`
 };
+
+export const Emoji = {
+  SLEEPING: `sleeping`,
+  SMILE: `smile`,
+  ANGRY: `angry`,
+  PUKE: `puke`
+};

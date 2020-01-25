@@ -3,11 +3,13 @@ import FilterController from './controllers/filter';
 import Profile from './components/profile';
 import Movies from './models/movies.js';
 import Statistics from './components/statistics';
-import {generateFimCards} from './mocks/film-card';
 import {render, RenderPosition} from './utils/render';
 import BoardController from "./controllers/board";
-import {generateComments} from "./mocks/comments";
 import {FilterTypeStatistic} from "./const";
+import API from './api.js';
+
+const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=`;
+const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict`;
 
 let isStatsViewing = false;
 
@@ -27,12 +29,10 @@ const showStatisticHandler = (boardControllerElement, statisticsElement) => {
   };
 };
 
-const FILM_CARD_COUNT = 12;
-const filmCards = generateFimCards(FILM_CARD_COUNT);
-const comments = generateComments(4);
+const api = new API(END_POINT, AUTHORIZATION);
 const movieModel = new Movies();
-movieModel.setCards(filmCards);
-movieModel.setComments(comments);
+
+
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 
@@ -40,17 +40,28 @@ render(siteHeaderElement, new Search(), RenderPosition.BEFOREEND);
 const profileElement = new Profile(movieModel);
 render(siteHeaderElement, profileElement, RenderPosition.BEFOREEND);
 
-const boardControllerElement = new BoardController(movieModel);
+const boardControllerElement = new BoardController(movieModel, api);
 
 const statisticsElement = new Statistics(movieModel, FilterTypeStatistic.ALL);
 const filterController = new FilterController(siteMainElement, movieModel, showStatisticHandler(boardControllerElement, statisticsElement));
 filterController.render();
 
-boardControllerElement.renderFilmCards(movieModel);
 render(siteMainElement, statisticsElement, RenderPosition.BEFOREEND);
 
-boardControllerElement.renderTopRatingFilms();
+api.getMovies()
+  .then((movies) => {
 
-boardControllerElement.renderTopCommentsFilms();
+    const commentsPromises = movies.map((movie) => {
+      return api.getComments(movie.id).then((comments) => {
+        movie.comments = comments;
+      });
+    });
 
+    Promise.all(commentsPromises).then(() => {
+      movieModel.setCards(movies);
 
+      boardControllerElement.renderFilmCards();
+      boardControllerElement.renderTopRatingFilms();
+      boardControllerElement.renderTopCommentsFilms();
+    });
+  });

@@ -1,5 +1,24 @@
 import AbstractSmartComponent from "./abstract-smart-component";
 import {formatCommentDate} from '../utils/common';
+import {Emoji} from "../const";
+
+const setEmotion = (emotion) => {
+  let emojiSelected = null;
+  switch (emotion) {
+    case Emoji.ANGRY:
+      emojiSelected = `./images/emoji/angry.png`;
+      break;
+    case Emoji.PUKE:
+      emojiSelected = `./images/emoji/puke.png`;
+      break;
+    case Emoji.SLEEPING:
+      emojiSelected = `./images/emoji/sleeping.png`;
+      break;
+    case Emoji.SMILE:
+      emojiSelected = `./images/emoji/puke.png`;
+      break;
+  } return emojiSelected;
+};
 
 export default class Comment extends AbstractSmartComponent {
   constructor(commentData) {
@@ -10,7 +29,7 @@ export default class Comment extends AbstractSmartComponent {
   getTemplate() {
     return (`<li class="film-details__comment">
                       <span class="film-details__comment-emoji">
-                        <img src="${this._commentData.emoji}" width="55" height="55" alt="emoji">
+                        <img src="${setEmotion(this._commentData.emotion)}" width="55" height="55" alt="emoji">
                       </span>
                       <div>
                         <p class="film-details__comment-text">${this._commentData.text}</p>
@@ -27,4 +46,3 @@ export default class Comment extends AbstractSmartComponent {
     this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, handler);
   }
 }
-
