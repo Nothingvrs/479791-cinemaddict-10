@@ -1,11 +1,18 @@
 import AbstractSmartComponent from './abstract-smart-component';
 import Rating from './rating';
+import Movie from '../models/movie';
 
 export default class PopupWatched extends AbstractSmartComponent {
-  constructor(card, container, onDataChange) {
+  constructor(cardID, movieModel, container, onDataChange) {
     super();
     this._container = container;
-    this._filmCard = card;
+    this._filmCard = null;
+    this._movieModel = movieModel;
+    this._movieModel.getCardsAll().forEach((card) => {
+      if (cardID === card.id) {
+        this._filmCard = card;
+      }
+    });
     this._onDataChange = onDataChange;
     this._ratingElement = new Rating(this._filmCard, this._container);
     this._subscribeOnEvent();
@@ -33,8 +40,16 @@ export default class PopupWatched extends AbstractSmartComponent {
   }
 
   _saveAndRerender() {
-    this._onDataChange(this, this._filmCard, Object.assign({}, this._filmCard, {
-      isWatched: !this._filmCard.isWatched,
-    }));
+    const newMovie = Movie.clone(this._filmCard);
+    newMovie.isWatched = !newMovie.isWatched;
+    if (newMovie.isWatched) {
+      newMovie.watchingDate = new Date();
+    }
+    if (!newMovie.isWatched) {
+      newMovie.userRating = 0;
+    }
+
+    return this._onDataChange(this, this._filmCard, newMovie);
   }
 }
+

@@ -20,18 +20,16 @@ export default class MovieController {
     this._popupElement = new PopupDetails(this._card);
     this._filmCardElement = new FilmCard(this._card);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
-    this._onDataChangeFavoriteFilter = this._onDataChangeFavoriteFilter.bind(this);
-    this._onDataChangeWatchedFilter = this._onDataChangeWatchedFilter.bind(this);
-    this._onDataChangeWatchlistFilter = this._onDataChangeWatchlistFilter.bind(this);
+    this._onDataChange = this._onDataChange.bind(this);
     this._onCtrlEnterKeyDown = this._onCtrlEnterKeyDown.bind(this);
     this._topContainer = this._popupElement.getElement().querySelector(`.form-details__top-container`);
     this._PopupInnerContainer = this._popupElement.getElement().querySelector(`form`);
-    this._cardFavoriteElement = new CardFavorite(this._card, this._onDataChangeFavoriteFilter);
-    this._cardWatchedElement = new CardWatched(this._card, this._topContainer, this._onDataChangeWatchedFilter);
-    this._cardAddToWatchlistElement = new CardAddToWatchlist(this._card, this._onDataChangeWatchlistFilter);
-    this._popupFavoriteElement = new PopupFavorite(this._card, this._onDataChangeFavoriteFilter);
-    this._popupAddToWatchlistElement = new PopupAddToWatchlist(this._card, this._onDataChangeWatchlistFilter);
-    this._popupWatchedElement = new PopupWatched(this._card, this._topContainer, this._onDataChangeWatchedFilter);
+    this._cardFavoriteElement = new CardFavorite(this._card, this._onDataChange);
+    this._cardWatchedElement = new CardWatched(this._card.id, this._movieModel, this._topContainer, this._onDataChange);
+    this._cardAddToWatchlistElement = new CardAddToWatchlist(this._card, this._onDataChange);
+    this._popupFavoriteElement = new PopupFavorite(this._card, this._onDataChange);
+    this._popupAddToWatchlistElement = new PopupAddToWatchlist(this._card, this._onDataChange);
+    this._popupWatchedElement = new PopupWatched(this._card.id, this._movieModel, this._topContainer, this._onDataChange);
     this._commentsElement = new CommentsController(this._card, this._PopupInnerContainer, this._card.id, this._api);
   }
 
@@ -99,30 +97,22 @@ export default class MovieController {
     }
   }
 
-  _onDataChangeFavoriteFilter(cardController, oldData, newData) {
-    const isSuccess = this._movieModel.updateCard(oldData.id, newData);
+  _onDataChange(cardController, oldData, newData) {
+    let movie;
 
-    if (isSuccess) {
-      oldData.isFavorite = newData.isFavorite;
-      cardController.rerender();
-    }
-  }
+    return this._api.updateMovie(oldData.id, newData)
+      .then((movieData) => {
+        movie = movieData;
+      })
+      .then(() => this._api.getComments(movie.id))
+      .then((comments) => {
+        movie.comments = comments;
 
-  _onDataChangeWatchedFilter(cardController, oldData, newData) {
-    const isSuccess = this._movieModel.updateCard(oldData.id, newData);
+        const isSuccess = this._movieModel.updateCard(oldData.id, movie);
 
-    if (isSuccess) {
-      oldData.isWatched = newData.isWatched;
-      cardController.rerender();
-    }
-  }
-
-  _onDataChangeWatchlistFilter(cardController, oldData, newData) {
-    const isSuccess = this._movieModel.updateCard(oldData.id, newData);
-
-    if (isSuccess) {
-      oldData.isGoingToWatchlist = newData.isGoingToWatchlist;
-      cardController.rerender();
-    }
+        if (isSuccess) {
+          cardController.rerender();
+        }
+      });
   }
 }

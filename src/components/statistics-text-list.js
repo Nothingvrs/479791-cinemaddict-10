@@ -1,5 +1,4 @@
 import AbstractComponent from "./abstract-component";
-import {getFilmsByFilterStatistic} from "../utils/filter";
 import {genreCounter} from './statistics';
 
 export default class StatisticsTextList extends AbstractComponent {
@@ -9,11 +8,11 @@ export default class StatisticsTextList extends AbstractComponent {
   }
 
   getTemplate() {
-    this._watchedFilms = getFilmsByFilterStatistic(this._cards, this._activeStatisticFilterType);
+    this._watchedFilms = this._cards;
     const totalFilms = this._watchedFilms.length;
     let amountDuration = 0;
     this._watchedFilms.forEach((card) => {
-      amountDuration += card.duration;
+      amountDuration += card.filmInfo.duration;
     });
 
     const fractionalPart = Math.trunc(amountDuration / 60);

@@ -129,8 +129,8 @@ export default class BoardController {
   renderTopRatingFilms() {
     const cards = this._movieModel.getCardsAll().slice();
     const topRatingFilms = cards.
-    sort((film1, film2) => (film2.rating - film1.rating))
-      .filter((film) => film.rating !== 0)
+    sort((film1, film2) => (film2.filmInfo.totalRating - film1.filmInfo.totalRating))
+      .filter((film) => film.filmInfo.totalRating !== 0)
       .slice(0, FILM_CARD_EXTRA_AMOUNT);
     if (topRatingFilms.length > 0) {
       render(this._board, new ExtraFilms(`Top rated`), RenderPosition.BEFOREEND);
@@ -144,7 +144,7 @@ export default class BoardController {
   renderTopCommentsFilms() {
     const cards = this._movieModel.getCardsAll().slice();
     const topCommentsFilms = cards
-      .sort((film1, film2) => (film2.comments - film1.comments))
+      .sort((film1, film2) => (film2.comments.length - film1.comments.length))
       .filter((film) => film.comments !== 0)
       .slice(0, FILM_CARD_EXTRA_AMOUNT);
     if (topCommentsFilms.length > 0) {

@@ -20,7 +20,7 @@ export default class Rating extends AbstractComponent {
     
            <div class="film-details__user-score">
              <div class="film-details__user-rating-poster">
-               <img src="${this._filmCard.poster}" alt="film-poster" class="film-details__user-rating-img">
+               <img src="${this._filmCard.filmInfo.poster}" alt="film-poster" class="film-details__user-rating-img">
     </div>
     
     <section class="film-details__user-rating-inner">
@@ -80,7 +80,7 @@ export default class Rating extends AbstractComponent {
 
   _onDataRating() {
     this._ratingButtons.forEach((button) => {
-      if (this._filmCard.personalRating === Number(button.value)) {
+      if (this._filmCard.userRating === Number(button.value)) {
         button.checked = true;
       }
     });
@@ -90,13 +90,13 @@ export default class Rating extends AbstractComponent {
     this._ratingButtons.forEach((button) => {
       button.checked = false;
     });
-    this._filmCard.personalRating = null;
+    this._filmCard.userRating = null;
   }
 
   _onSetRating() {
     this._ratingButtons.forEach((button) => {
       button.addEventListener(`click`, () => {
-        this._filmCard.personalRating = button.value;
+        this._filmCard.userRating = button.value;
       });
     });
   }

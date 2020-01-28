@@ -1,4 +1,5 @@
 import AbstractSmartComponent from './abstract-smart-component';
+import Movie from '../models/movie';
 
 export default class PopupFavorite extends AbstractSmartComponent {
   constructor(card, onDataChange) {
@@ -28,8 +29,9 @@ export default class PopupFavorite extends AbstractSmartComponent {
   }
 
   _saveAndRerender() {
-    this._onDataChange(this, this._filmCard, Object.assign({}, this._filmCard, {
-      isFavorite: !this._filmCard.isFavorite,
-    }));
+    const newMovie = Movie.clone(this._filmCard);
+    newMovie.isFavorite = !newMovie.isFavorite;
+
+    return this._onDataChange(this, this._filmCard, newMovie);
   }
 }

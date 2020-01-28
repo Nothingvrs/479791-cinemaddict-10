@@ -9,7 +9,7 @@ import StatisticsTextList from './statistics-text-list';
 export const genreCounter = (cards, prop) => {
   let genreCount = 0;
   cards.forEach((card) => {
-    card.genre.forEach((genre) => {
+    card.filmInfo.genres.forEach((genre) => {
       if (genre === prop) {
         genreCount++;
       }
@@ -29,6 +29,9 @@ export default class Statistics extends AbstractComponent {
     this._chart = null;
     this.show = this.show.bind(this);
     this.hide = this.hide.bind(this);
+    this.renderStatisticsTextList = this.renderStatisticsTextList.bind(this);
+    this.updateChartData = this.updateChartData.bind(this);
+    this._onFilterClick = this._onFilterClick.bind(this);
     this.hide();
     this.setActiveFilter();
     this.renderChart();
@@ -55,14 +58,17 @@ export default class Statistics extends AbstractComponent {
       this._chart = new Chart(ctx, {
         type: `bar`,
         data: {
-          labels: [`Romance comedy`, `Horror`, `Documentary`, `Thriller`, `Drama`, `Comedy`],
+          labels: [`Adventure`, `Horror`, `Action`, `Thriller`, `Drama`, `Comedy`, `Family`, `Sci-Fi`, `Animation`],
           datasets: [{
-            data: [genreCounter(this._watchedFilms, `Romance comedy`),
+            data: [genreCounter(this._watchedFilms, `Adventure`),
               genreCounter(this._watchedFilms, `Horror`),
-              genreCounter(this._watchedFilms, `Documentary`),
+              genreCounter(this._watchedFilms, `Action`),
               genreCounter(this._watchedFilms, `Thriller`),
               genreCounter(this._watchedFilms, `Drama`),
-              genreCounter(this._watchedFilms, `Comedy`)],
+              genreCounter(this._watchedFilms, `Comedy`),
+              genreCounter(this._watchedFilms, `Family`),
+              genreCounter(this._watchedFilms, `Sci-Fi`),
+              genreCounter(this._watchedFilms, `Animation`)],
             backgroundColor: `rgba(255, 206, 86, 0.2)`,
             borderColor: `rgba(255, 206, 86, 1)`,
             borderWidth: 2,
@@ -94,12 +100,15 @@ export default class Statistics extends AbstractComponent {
       dataset.data.pop();
     });
     this._chart.data.datasets = [{
-      data: [genreCounter(this._watchedFilms, `Romance comedy`),
+      data: [genreCounter(this._watchedFilms, `Adventure`),
         genreCounter(this._watchedFilms, `Horror`),
-        genreCounter(this._watchedFilms, `Documentary`),
+        genreCounter(this._watchedFilms, `Action`),
         genreCounter(this._watchedFilms, `Thriller`),
         genreCounter(this._watchedFilms, `Drama`),
-        genreCounter(this._watchedFilms, `Comedy`)],
+        genreCounter(this._watchedFilms, `Comedy`),
+        genreCounter(this._watchedFilms, `Family`),
+        genreCounter(this._watchedFilms, `Sci-Fi`),
+        genreCounter(this._watchedFilms, `Animation`)],
       backgroundColor: `rgba(255, 206, 86, 0.2)`,
       borderColor: `rgba(255, 206, 86, 1)`,
       borderWidth: 2,
@@ -113,6 +122,21 @@ export default class Statistics extends AbstractComponent {
 
   setActiveFilter() {
     this.getElement().querySelector(`.statistic__filters-input[value=${this._activeStatisticFilterType}]`).checked = true;
+  }
+
+  setFilterByPeriod() {
+    this.getElement().querySelector(`.statistic__filters`).addEventListener(`change`, this._onFilterClick);
+  }
+
+  removeFilterByPeriod() {
+    this.getElement().querySelector(`.statistic__filters`).removeEventListener(`change`, this._onFilterClick);
+  }
+
+  _onFilterClick(evt) {
+    evt.target.checked = true;
+    this._activeStatisticFilterType = evt.target.value;
+    this.renderStatisticsTextList();
+    this.updateChartData();
   }
 
   getTemplate() {

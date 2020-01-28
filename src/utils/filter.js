@@ -5,7 +5,7 @@ const getWatchedMovies = (cards) => {
 };
 
 const getWatchlistMovies = (cards) => {
-  return cards.filter((card) => card.isGoingToWatchlist);
+  return cards.filter((card) => card.isInWatchlist);
 };
 
 const getFavoriteMovies = (cards) => {
@@ -17,19 +17,64 @@ const getAllMovies = (cards) => {
 };
 
 const getWatchedFilmsToday = (films) => {
-  return films.filter((film) => film.viewingDate === `today` && film.isWatched);
+  let now = new Date();
+  let watchedFilmsByPeriod = [];
+  const dateInitial = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  films.forEach((film) =>{
+    const watchingDate = film.watchingDate;
+    if (watchingDate.getFullYear() === dateInitial.getFullYear() &&
+    watchingDate.getMonth() === dateInitial.getMonth() &&
+    watchingDate.getDate() === dateInitial.getDate() &&
+    film.isWatched) {
+      watchedFilmsByPeriod.push(film);
+    }
+  });
+  return watchedFilmsByPeriod;
 };
 
 const getWatchedFilmsWeek = (films) => {
-  return films.filter((film) => film.viewingDate === `week` && film.isWatched);
+  let now = new Date();
+  let watchedFilmsByPeriod = [];
+  const dateInitial = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6);
+  films.forEach((film) =>{
+    const watchingDate = film.watchingDate;
+    if (watchingDate.getFullYear() === dateInitial.getFullYear() &&
+      watchingDate.getMonth() === dateInitial.getMonth() &&
+      watchingDate.getDate() >= dateInitial.getDate() &&
+      film.isWatched) {
+      watchedFilmsByPeriod.push(film);
+    }
+  });
+  return watchedFilmsByPeriod;
 };
 
 const getWatchedFilmsMonth = (films) => {
-  return films.filter((film) => film.viewingDate === `month` && film.isWatched);
+  let now = new Date();
+  let watchedFilmsByPeriod = [];
+  const dateInitial = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  films.forEach((film) =>{
+    const watchingDate = film.watchingDate;
+    if (watchingDate.getFullYear() === dateInitial.getFullYear() &&
+      watchingDate.getMonth() === dateInitial.getMonth() &&
+      film.isWatched) {
+      watchedFilmsByPeriod.push(film);
+    }
+  });
+  return watchedFilmsByPeriod;
 };
 
 const getWatchedFilmsYear = (films) => {
-  return films.filter((film) => film.viewingDate === `year` && film.isWatched);
+  let now = new Date();
+  let watchedFilmsByPeriod = [];
+  const dateInitial = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  films.forEach((film) =>{
+    const watchingDate = film.watchingDate;
+    if (watchingDate.getFullYear() === dateInitial.getFullYear() &&
+      film.isWatched) {
+      watchedFilmsByPeriod.push(film);
+    }
+  });
+  return watchedFilmsByPeriod;
 };
 
 export const getTasksByFilter = (cards, filterType) => {
@@ -49,17 +94,22 @@ export const getTasksByFilter = (cards, filterType) => {
 };
 
 export const getFilmsByFilterStatistic = (films, filterTypeStatistic) => {
+  let watchedMovieByPeriod = [];
   switch (filterTypeStatistic) {
     case FilterTypeStatistic.ALL:
-      return getWatchedMovies(films);
+      watchedMovieByPeriod = getWatchedMovies(films);
+      break;
     case FilterTypeStatistic.TODAY:
-      return getWatchedFilmsToday(films);
+      watchedMovieByPeriod = getWatchedFilmsToday(films);
+      break;
     case FilterTypeStatistic.WEEK:
-      return getWatchedFilmsWeek(films);
+      watchedMovieByPeriod = getWatchedFilmsWeek(films);
+      break;
     case FilterTypeStatistic.MONTH:
-      return getWatchedFilmsMonth(films);
+      watchedMovieByPeriod = getWatchedFilmsMonth(films);
+      break;
     case FilterTypeStatistic.YEAR:
-      return getWatchedFilmsYear(films);
+      watchedMovieByPeriod = getWatchedFilmsYear(films);
   }
-  return films;
+  return watchedMovieByPeriod;
 };

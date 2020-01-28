@@ -1,16 +1,9 @@
 import AbstractComponent from '../components/abstract-component';
 import Comment from '../components/comment';
 import Comments from '../components/comments';
+import MovieComment from '../models/comment';
 import {render, RenderPosition} from '../utils/render';
-import {getRandomArrayElement} from "../utils/common";
 import he from 'he';
-
-const authorComment = [
-  `Tim Macoveev`,
-  `John Doe`,
-  `Jerry Black`,
-  `Aaron Mac Calister`
-];
 
 export default class CommentsController extends AbstractComponent {
   constructor(card, form, id, api) {
@@ -18,9 +11,12 @@ export default class CommentsController extends AbstractComponent {
     this._api = api;
     this._form = form;
     this._card = card;
+    this._api.getComments(id)
+      .then((comments) => {
+        this._card.comments = comments;
+      });
     this._commentsData = this._card.comments;
     this._commentsList = null;
-    this._getData = this._getData.bind(this);
   }
 
   _renderComments() {
@@ -41,25 +37,28 @@ export default class CommentsController extends AbstractComponent {
     });
   }
 
-  _getData() {
-    return new FormData(this._form);
-  }
-
-  _parseFormData(formData) {
-    const emojiChecked = formData.get(`comment-emoji`);
+  onCommentAdd() {
+    const emojiChecked = new FormData(this._form).get(`comment-emoji`);
     const label = document.querySelector(`[for="emoji-${emojiChecked}"]`);
     const selectedEmoji = label.querySelector(`img`).src;
+    const commentText = this._form.querySelector(`.film-details__comment-input`);
 
-    return {
-      author: getRandomArrayElement(authorComment),
-      text: he.encode(formData.get(`comment`)),
-      emoji: selectedEmoji,
-      date: new Date(),
-    };
-  }
+    if (selectedEmoji && commentText.value) {
+      this._form.disabled = true;
 
-  onCommentAdd() {
-    this._comments.remove();
-    this._renderComments();
+      const newComment = new MovieComment({
+        'comment': he.encode(commentText.value),
+        'date': new Date(),
+        'emotion': selectedEmoji,
+      });
+
+      this._api.getComments()
+        .then((comments) => {
+          comments.unshift(this._api.createComment(newComment, this._card.id));
+        });
+      this._comments.remove();
+      this._renderComments();
+    }
   }
 }
+

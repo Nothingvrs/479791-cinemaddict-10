@@ -21,9 +21,11 @@ const showStatisticHandler = (boardControllerElement, statisticsElement) => {
       statisticsElement.show();
       statisticsElement.renderStatisticsTextList();
       statisticsElement.updateChartData();
+      statisticsElement.setFilterByPeriod();
     } else {
       boardControllerElement.show();
       statisticsElement.hide();
+      statisticsElement.removeFilterByPeriod();
       isStatsViewing = false;
     }
   };
@@ -31,26 +33,16 @@ const showStatisticHandler = (boardControllerElement, statisticsElement) => {
 
 const api = new API(END_POINT, AUTHORIZATION);
 const movieModel = new Movies();
-
-
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
-
-render(siteHeaderElement, new Search(), RenderPosition.BEFOREEND);
 const profileElement = new Profile(movieModel);
-render(siteHeaderElement, profileElement, RenderPosition.BEFOREEND);
-
 const boardControllerElement = new BoardController(movieModel, api);
-
 const statisticsElement = new Statistics(movieModel, FilterTypeStatistic.ALL);
-const filterController = new FilterController(siteMainElement, movieModel, showStatisticHandler(boardControllerElement, statisticsElement));
-filterController.render();
 
-render(siteMainElement, statisticsElement, RenderPosition.BEFOREEND);
+const filterController = new FilterController(siteMainElement, movieModel, showStatisticHandler(boardControllerElement, statisticsElement));
 
 api.getMovies()
   .then((movies) => {
-
     const commentsPromises = movies.map((movie) => {
       return api.getComments(movie.id).then((comments) => {
         movie.comments = comments;
@@ -58,10 +50,16 @@ api.getMovies()
     });
 
     Promise.all(commentsPromises).then(() => {
+      render(siteHeaderElement, new Search(), RenderPosition.BEFOREEND);
+      render(siteHeaderElement, profileElement, RenderPosition.BEFOREEND);
       movieModel.setCards(movies);
-
+      filterController.render();
       boardControllerElement.renderFilmCards();
       boardControllerElement.renderTopRatingFilms();
       boardControllerElement.renderTopCommentsFilms();
+      render(siteMainElement, statisticsElement, RenderPosition.BEFOREEND);
+      statisticsElement.renderChart();
     });
   });
+
+
